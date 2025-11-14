@@ -1,0 +1,4 @@
+Madrid:ajout numero d ordre dans arrive|amelioratio de la page de garde genere#liste suggestion s adapte suivant diplo ou intermail arrive|rearangement des interfaces depart et arrive#A Monsieur Babacar Alassane |NDAO, Directeur Genrerale de la DCSSI#Monsieur Babacar alassane ndao|directeur general de la dcssi|a la presidence de la repubique|du senegal pays d afrique de l ouest
+Banjul:listview_destinataire.getItems().clear();
+Ankara:A Monsieur Jean Jacque Bienvenu|Chef de service a la dcssi
+Bamako:monsieur ambassadeur demande si vous voulez|bien acceder a sa demande de nouvelle|section#Monsieur le procureur de la |republique mr diop#madame le ministre

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="950.0" styleClass="lighter_dark_blue" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="message_arrive.Message_Arrive_Controller">
+   <children>
+      <Pane layoutX="20.0" layoutY="20.0" prefHeight="75.0" prefWidth="200.0" styleClass="dark_blue" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="180.0" layoutY="26.0" styleClass="light_blue_text_style" text="Enregistrer un message  Arrivé" />
+            <ImageView fitHeight="70.0" fitWidth="80.0" layoutX="75.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/gmail.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <GridPane hgap="50.0" layoutX="81.0" layoutY="108.0" prefHeight="411.0" prefWidth="390.0" vgap="15.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="137.80001220703124" />
+            <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="208.0" minWidth="10.0" prefWidth="201.79998779296875" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="145.0" minHeight="0.0" prefHeight="38.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="182.0" minHeight="0.0" prefHeight="33.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="155.0" minHeight="0.0" prefHeight="34.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="170.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="113.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="170.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="170.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="170.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="143.0" minHeight="10.0" prefHeight="89.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label styleClass="light_blue_text_style" text="Numero d'ordre" GridPane.rowIndex="2" />
+            <TextField fx:id="text_num_arrive" prefHeight="25.0" prefWidth="190.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label styleClass="light_blue_text_style" text="Expediteur" GridPane.rowIndex="4" />
+            <Label styleClass="light_blue_text_style" text="Date" GridPane.rowIndex="3" />
+            <DatePicker fx:id="date_picker" prefHeight="25.0" prefWidth="190.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="text_expediteur_diplomail" prefHeight="25.0" prefWidth="190.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label styleClass="light_blue_text_style" text="Objet Message" GridPane.rowIndex="8" />
+            <TextArea fx:id="area_objet_message" maxHeight="85.0" prefHeight="85.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <Label styleClass="light_blue_text_style" text="Mention" GridPane.rowIndex="1" />
+            <ChoiceBox fx:id="choice_mention" prefHeight="25.0" prefWidth="190.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label styleClass="light_blue_text_style" text="Type Message" />
+            <ChoiceBox fx:id="choice_type_message" prefHeight="25.0" prefWidth="190.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" />
+            <TextField fx:id="text_expediteur_intermail" prefWidth="190.0" styleClass="text_gras_no_size" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label styleClass="light_blue_text_style" text="Numero Arrive" GridPane.rowIndex="5" />
+            <TextField fx:id="text_numero_ordre_selon_l_expediteur" prefHeight="25.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </TextField>
+            <ChoiceBox fx:id="choice_systeme_cryptographique" prefHeight="25.0" prefWidth="195.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Label styleClass="light_blue_text_style" text="CryptoSysteme" GridPane.rowIndex="7" />
+            <Label styleClass="light_blue_text_style" text="Nom Fichier" GridPane.rowIndex="6" />
+            <TextField fx:id="text_nom_fichier" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+         </children>
+      </GridPane>
+      <Button graphicTextGap="15.0" layoutX="301.0" layoutY="546.0" mnemonicParsing="false" onAction="#on_valider_clicked" prefHeight="29.0" prefWidth="110.0" text="Valider">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/icons8_ok_96px.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <Pane fx:id="paneau_drag_and_drop" layoutX="490.0" layoutY="95.0" prefHeight="480.0" prefWidth="424.0" styleClass="transparent_light_white" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="95.0">
+         <children>
+            <Label layoutX="84.0" layoutY="244.0" styleClass="light_blue_text_style" text="Enregistrement message Arrivé" />
+         </children>
+      </Pane>
+      <Button layoutX="130.0" layoutY="545.0" mnemonicParsing="false" onAction="#open_file" prefHeight="29.0" prefWidth="127.0" text="Ouvrir Fichier">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/open_file_directory.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+   </children>
+</AnchorPane>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane prefHeight="650.0" prefWidth="1150.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Main_Controller">
+   <children>
+      <fx:include fx:id="pane_arrive" source="../message_arrive/Message_Arrive.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <fx:include fx:id="rapport_depart" source="../rapport_depart/Rapport_Depart.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <fx:include fx:id="rapport_arrive" source="../rapport_arrive/Rapport_Arrive.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <fx:include fx:id="pane_find_depart" source="../find_depart/Find_Depart.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <fx:include fx:id="pane_find_arrive" source="../find_arrive/Find_Arrive.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <fx:include fx:id="parametres" source="../parametres/Parametres.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <fx:include fx:id="pane_depart" source="../message_depart/Message_Depart.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane fx:id="pan_bouton" layoutX="10.0" layoutY="10.0" minWidth="150.0" prefHeight="600.0" prefWidth="150.0" styleClass="dark_blue" stylesheets="@style_tableau_button.css" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox layoutY="110.0" spacing="4.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#on_bouton_depart_clicked" prefHeight="40.0" prefWidth="150.0" text="Message Départ" />
+                  <Button mnemonicParsing="false" onAction="#on_bouton_arrive_clicked" prefHeight="40.0" prefWidth="150.0" text="Message Arrivé" />
+                  <Button mnemonicParsing="false" onAction="#on_bouton_rechercher_depart_clicked" prefHeight="40.0" prefWidth="150.0" text="Rechercher Départ" />
+                  <Button mnemonicParsing="false" onAction="#on_find_arrive_clicked" prefHeight="40.0" prefWidth="150.0" text="Rechercher Arrivé" />
+                  <Button mnemonicParsing="false" onAction="#on_rapport_depart_clicked" prefHeight="40.0" prefWidth="150.0" text="Registre Depart" />
+                  <Button layoutX="10.0" layoutY="186.0" mnemonicParsing="false" onAction="#on_rapport_arrive_clicked" prefHeight="40.0" prefWidth="150.0" text="Registre Arrive" />
+                  <Button mnemonicParsing="false" onAction="#on_parametres_clicked" prefHeight="40.0" prefWidth="150.0" text="Parametres" />
+               </children>
+            </VBox>
+            <Circle fill="#ffffffef" layoutX="76.0" layoutY="54.0" radius="47.0" stroke="#ff00a6" strokeType="INSIDE" strokeWidth="2.0" />
+            <ImageView fitHeight="75.0" fitWidth="74.0" layoutX="43.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="43.0" AnchorPane.rightAnchor="38.400001525878906">
+               <image>
+                  <Image url="@../images/lion.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

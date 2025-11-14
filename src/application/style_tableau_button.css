@@ -1,0 +1,24 @@
+.button{
+	-fx-background-color:linear-gradient(from 0% 0% to 100% 100%, #6c81fe 0%, #2bc9fd 100%);
+	-fx-text-fill: #d0e0ef;
+	-fx-font-weight: bolder;
+	-fx-font-size: 1.2em;
+	-fx-background-radius:0px;
+}
+
+.button:hover{
+	-fx-background-color:linear-gradient(from 0% 0% to 100% 100%, coral 0%, orangered 100%);
+}
+
+.pane {
+	-fx-border-color:linear-gradient(from 0% 0% to 100% 100%, #fe00ff 0%, #0ff0 100%);
+	-fx-border-width: 3px;
+	-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #af00bd 30%, #2670fc 100%);
+	-fx-border-radius:3px;
+	-fx-background-radius: 3px;
+}
+
+
+.new_buuton{
+	-fx-background-color: linear-gradient(from 0% 100% to 100% 100%, black 0%, black 20% , #111111 0%, #111111 20% );
+	}

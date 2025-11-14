@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="200.0" prefWidth="150.0" styleClass="dark_blue" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutX="14.0" layoutY="10.0" prefHeight="86.0" prefWidth="16.0" spacing="10.0">
+         <children>
+            <Circle fx:id="cercle_save_bd" fill="#1fff34" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+            <Circle fx:id="cercle_generate_pdg" fill="#1fff34" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+            <Circle fx:id="cercle_chiffrement" fill="#1fff34" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+            <Circle fx:id="cercle_send_mail" fill="#ff2621" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
+         </children>
+      </VBox>
+      <Pane layoutX="10.0" layoutY="111.0" prefHeight="80.0" prefWidth="130.0" styleClass="transparent_light_white">
+         <children>
+            <Label layoutX="1.0" layoutY="-2.0" prefHeight="80.0" prefWidth="130.0" text="Veuillez glisser-deposer le fichier a concatener pour pousuivre les operations." textFill="WHITE" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <padding>
+                  <Insets left="3.0" />
+               </padding>
+            </Label>
+         </children>
+      </Pane>
+      <VBox layoutX="47.0" layoutY="5.0" spacing="10.0">
+         <children>
+            <Label text="Sauvegarde BD" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label text="Génération PDG" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label text="Chiffrement" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label text="Envoi Email" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

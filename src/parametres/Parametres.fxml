@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="650.0" prefWidth="950.0" styleClass="lighter_dark_blue" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="parametres.Parametres_controller">
+   <children>
+      <Pane layoutX="20.0" layoutY="20.0" prefHeight="75.0" prefWidth="200.0" styleClass="dark_blue" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="180.0" layoutY="26.0" styleClass="light_blue_text_style" text="Parametrage" />
+            <ImageView fitHeight="70.0" fitWidth="80.0" layoutX="75.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/gmail.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Button graphicTextGap="15.0" layoutX="390.0" layoutY="574.0" mnemonicParsing="false" onAction="#on_valider_clicked" prefHeight="39.0" prefWidth="202.0" text="Valider">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/icons8_ok_96px.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+      <GridPane hgap="10.0" layoutX="40.0" layoutY="114.0" prefHeight="421.0" prefWidth="450.0" vgap="15.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="204.0" minWidth="10.0" prefWidth="204.0" />
+            <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="208.0" minWidth="10.0" prefWidth="163.0" />
+            <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="208.0" minWidth="10.0" prefWidth="70.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="182.0" minHeight="0.0" prefHeight="33.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="155.0" minHeight="0.0" prefHeight="34.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="155.0" minHeight="0.0" prefHeight="34.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="155.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="155.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="155.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="155.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="155.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="155.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label styleClass="light_blue_text_style" text="Dossier Arrivée" GridPane.rowIndex="1" />
+            <TextField fx:id="text_crypto" prefHeight="25.0" prefWidth="190.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label styleClass="light_blue_text_style" text="Dossier Départ" />
+            <TextField fx:id="text_clair" prefHeight="25.0" prefWidth="190.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" />
+            <Label styleClass="light_blue_text_style" text="Imprimante par defaut" GridPane.rowIndex="2" />
+            <TextField fx:id="text_imprimante_par_defaut" prefHeight="25.0" prefWidth="190.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" onAction="#on_path_clair_clicked" text="Dossier" GridPane.columnIndex="2">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#on_path_crypto_clicked" text="Dossier" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#choose_default_printer" text="Choose" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Label styleClass="light_blue_text_style" text="Message Départ" GridPane.rowIndex="4" />
+            <Label styleClass="light_blue_text_style" text="Message Départ Officiel" GridPane.rowIndex="5" />
+            <Label styleClass="light_blue_text_style" text="Message Départ Divers" GridPane.rowIndex="6" />
+            <Label styleClass="light_blue_text_style" text="Message Arrive" GridPane.rowIndex="7" />
+            <Label styleClass="light_blue_text_style" text="Message Arrive Officiel" GridPane.rowIndex="8" />
+            <TextField fx:id="text_num_depart" prefHeight="25.0" prefWidth="168.0" promptText="10" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="text_num_depart_officiel" prefHeight="25.0" prefWidth="192.0" promptText="50000" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <TextField fx:id="text_num_depart_divers" prefHeight="25.0" prefWidth="163.0" promptText="70000" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <TextField fx:id="text_num_arrive" prefHeight="25.0" prefWidth="168.0" promptText="10" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <TextField fx:id="text_num_arrive_officiel" prefHeight="25.0" prefWidth="177.0" promptText="50000" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

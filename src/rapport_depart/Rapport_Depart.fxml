@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="pane" prefHeight="650.0" prefWidth="950.0" styleClass="lighter_dark_blue" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rapport_depart.Control_Rapport_Depart">
+   <children>
+      <Pane layoutX="20.0" layoutY="20.0" prefHeight="75.0" prefWidth="200.0" styleClass="dark_blue" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="180.0" layoutY="26.0" styleClass="light_blue_text_style" text="Imprimer fiche registre depart" />
+            <ImageView fitHeight="70.0" fitWidth="80.0" layoutX="75.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/icons8_accept_database_100px.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <TableView fx:id="tableview" layoutX="54.0" layoutY="138.0" prefHeight="336.0" prefWidth="900.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0">
+        <columns>
+          <TableColumn fx:id="colonne_numero_depart" prefWidth="45.0" text="ID" />
+          <TableColumn fx:id="colonne_destinataire" prefWidth="110.0" text="Destinataire" />
+            <TableColumn fx:id="colonne_numero_ordre" prefWidth="55.0" text="N°Ordre" />
+            <TableColumn fx:id="colonne_nom_fichier" prefWidth="110.0" text="Nom Fichier" />
+            <TableColumn fx:id="colone_Mention" prefWidth="85.0" text="Mention" />
+            <TableColumn fx:id="colone_date" prefWidth="70.0" text="Date" />
+            <TableColumn fx:id="colone_crypto_systeme" prefWidth="93.0" text="Cryptosysteme" />
+            <TableColumn fx:id="colone_objet" prefWidth="315.0" text="Objet Message" />
+        </columns>
+      </TableView>
+      <AnchorPane layoutX="228.0" layoutY="95.0" prefHeight="147.0" prefWidth="521.0" styleClass="transparent_light_white">
+         <children>
+            <GridPane hgap="40.0" layoutX="52.0" layoutY="12.0" prefHeight="127.0" prefWidth="377.0" vgap="10.0" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="93.0" AnchorPane.topAnchor="11.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <ChoiceBox fx:id="choice_registre" prefHeight="25.0" prefWidth="160.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" />
+                  <Label styleClass="light_blue_text_style" text="Choisir Registre :" />
+                  <Label styleClass="light_blue_text_style" text="Mois" GridPane.rowIndex="2" />
+                  <ChoiceBox fx:id="choice_mois" prefHeight="25.0" prefWidth="160.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label styleClass="light_blue_text_style" text="Choisir Destinataire :" GridPane.rowIndex="1" />
+                  <TextField fx:id="destinataire" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin>
+                  </TextField>
+               </children>
+            </GridPane>
+            <Button layoutX="435.0" layoutY="59.0" mnemonicParsing="false" onAction="#on_valider_clicked" text="Valider" AnchorPane.rightAnchor="24.0">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+      <Button fx:id="bouton_imprimer_rapport" contentDisplay="RIGHT" disable="true" graphicTextGap="15.0" layoutX="320.0" layoutY="600.0" mnemonicParsing="false" onAction="#on_print_clicked" prefHeight="35.0" prefWidth="243.0" text="Générer Cahier Registre" AnchorPane.bottomAnchor="15.0">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/icons8_print_96px.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+   </children>
+</AnchorPane>

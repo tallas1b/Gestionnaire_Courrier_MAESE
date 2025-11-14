@@ -1,0 +1,65 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.lighter_dark_blue{
+	-fx-background-color:#354057;
+}
+
+.light_blue_text_style{
+	-fx-text-fill: #d0e0ef;
+	-fx-font-size: 1.3em;
+	-fx-font-weight: bold;
+}
+
+.transparent_light_white{
+	-fx-background-color: #ffffff22;
+	-fx-border-color: white; 
+	}
+	
+.gradient_bleu{
+	-fx-background-color:linear-gradient(from 0% 0% to 100% 100%,#2bc9fd 0% , #6c81fe 100%);
+}
+
+.gradient_bleu_inverse{
+	-fx-background-color:linear-gradient(from 0% 0% to 100% 100%,#2bc9fd 0% , #6c81fe 100%);
+	-fx-border-color: white; 
+}
+	
+.text_gras_no_size{
+	-fx-font-weight: bold;
+}
+
+.texte_gras{
+	-fx-font-size: 1.3em;
+	-fx-font-weight: bold;
+}
+
+.texte_gras_small{
+	-fx-text-fill: #000000;
+	-fx-font-size: 1.1em;
+	-fx-font-weight: bold;
+}
+
+.dark_blue {
+	-fx-background-color:#2b2e3d;
+}
+
+.red {
+	-fx-background-color:#ff2e3d;
+}
+
+
+.warning{
+	-fx-effect:dropshadow(  gaussian  , red , 15 , 0.5 , 0 , 0 );
+}
+
+/* // Background color of the whole context menu*/
+.choice-box .context-menu { -fx-background-color: black; }
+/*Focused item background color in the list */ 
+.choice-box .menu-item:focused { -fx-background-color: orange; }
+/* Text color of non-focused items in the list */
+.choice-box .menu-item > .label { -fx-text-fill: white; }
+/* Text color of focused item in the list */
+.choice-box .menu-item:focused > .label { -fx-text-fill: black; }
+
+
+.choice-box > .label { -fx-text-fill: black; }
