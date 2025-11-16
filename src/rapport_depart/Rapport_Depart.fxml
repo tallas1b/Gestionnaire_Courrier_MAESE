@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" prefHeight="650.0" prefWidth="950.0" styleClass="lighter_dark_blue" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rapport_depart.Control_Rapport_Depart">
+<AnchorPane fx:id="pane" prefHeight="650.0" prefWidth="950.0" styleClass="lighter_dark_blue" stylesheets="@../application/application.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="rapport_depart.Control_Rapport_Depart">
    <children>
       <Pane layoutX="20.0" layoutY="20.0" prefHeight="75.0" prefWidth="200.0" styleClass="dark_blue" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -55,10 +55,10 @@
                <children>
                   <ChoiceBox fx:id="choice_registre" prefHeight="25.0" prefWidth="160.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" />
                   <Label styleClass="light_blue_text_style" text="Choisir Registre :" />
-                  <Label styleClass="light_blue_text_style" text="Mois" GridPane.rowIndex="2" />
-                  <ChoiceBox fx:id="choice_mois" prefHeight="25.0" prefWidth="160.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label styleClass="light_blue_text_style" text="Choisir Destinataire :" GridPane.rowIndex="1" />
-                  <TextField fx:id="destinataire" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Label styleClass="light_blue_text_style" text="Mois" GridPane.rowIndex="1" />
+                  <ChoiceBox fx:id="choice_mois" prefHeight="25.0" prefWidth="160.0" styleClass="text_gras_no_size" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label styleClass="light_blue_text_style" text="Choisir Destinataire :" GridPane.rowIndex="2" />
+                  <TextField fx:id="destinataire" prefHeight="25.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>

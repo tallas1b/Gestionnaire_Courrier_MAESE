@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -242,7 +243,9 @@ public class Message_Depart_Controller implements Initializable{
 				for( String amb : Constants.liste_ambassade) {
 					if(amb.equalsIgnoreCase(newValue)) {
 						System.out.println("ambassade detecte");
-						textfield_numero_d_ordre.setText(Integer.toString( Constants.hash_num_departs.get(newValue) ) );
+						String num = Integer.toString( Constants.hash_num_departs.get(newValue) + 1);
+						textfield_numero_d_ordre.setText( num );
+						label_numero.setText( num );
 					}
 				}
 
@@ -645,8 +648,9 @@ public class Message_Depart_Controller implements Initializable{
 
 			//clear des differents champs
 			area_objet_message.clear();
-			text_num_depart.setText((num_dernier_message_depart + 1) +"");
+			text_num_depart.clear();
 			label_objet.setText("Objet du Message");
+			text_destinataire_diplomail.clear();
 			//LE CAS TYPE SERVICE sinon erreur car num est String 'SERVICE'
 			if( !type_message.equals("Service")) {
 				textfield_numero_d_ordre.setText((num_dernier_message_depart_officiel + 1) +"" );
@@ -735,7 +739,7 @@ public class Message_Depart_Controller implements Initializable{
 			alert.show();
 			return false;
 		}
-		
+
 		boolean b = false;
 		String dest = text_destinataire_diplomail.getText();
 		for( String amb : Constants.liste_ambassade) {
@@ -743,7 +747,7 @@ public class Message_Depart_Controller implements Initializable{
 				b = true;
 			}
 		}
-		
+
 		if(b == false) {
 			Decorator.addDecoration(text_destinataire_diplomail, new StyleClassDecoration("warning"));
 			Alert alert = new Alert(AlertType.ERROR);
@@ -1220,13 +1224,19 @@ public class Message_Depart_Controller implements Initializable{
 
 		try {
 			ResultSet rs = Query.select(sql);
-
 			while (rs.next()) {
 				Constants.hash_num_departs.put(rs.getString(2), rs.getInt(3));
-				System.out.println("nom : "+ rs.getString(2) + "    /  num : "+rs.getString(3));
 			}
-			
+
 			Query.close_connection();
+
+			for (Map.Entry<String, Integer> entry : Constants.hash_num_departs.entrySet()) {
+				String key = entry.getKey();
+				Integer value = entry.getValue();
+				System.out.println("Key=" + key + ", Value=" + value);
+			}
+
+
 
 		} catch (SQLException e) {
 			showExceptionAlert("Erreur insertion base de donne", "Erreurlors de l insertion dans la base de donne. Veuillez verifier le code", e);

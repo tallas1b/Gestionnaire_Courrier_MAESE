@@ -19,6 +19,8 @@ public class Beans_Message_Depart {
 	private  Integer numero_ordre; // pas dans le insert da la database 
 	private String crypto_systeme;
 	private String nom_fichier;
+	
+	private String desti = "";
 
 
 	public Beans_Message_Depart() {
@@ -40,6 +42,16 @@ public class Beans_Message_Depart {
 		this.numero_ordre = numero_ordre;
 		this.crypto_systeme = crypto_systeme;
 		this.nom_fichier = nom_fichier;
+		
+		int index = 0;
+		for( String amb : Constants.liste_ambassade) {
+			if(amb.equalsIgnoreCase(destinataire)) {
+				desti = Constants.liste_ambassade_base_donne[index];
+				break;
+			}
+			index++;
+		}
+		
 	}
 
 
@@ -167,17 +179,6 @@ public class Beans_Message_Depart {
 	}
 
 	public String formatToDatabase_officiel() {
-		
-		int index = 0;
-		String desti = "";
-		for( String amb : Constants.liste_ambassade) {
-			if(amb.equalsIgnoreCase(destinataire)) {
-				desti = Constants.liste_ambassade_base_donne[index];
-				break;
-			}
-			index++;
-		}
-		
 		 
 		String sql = "INSERT INTO "+desti+"(date,objet,numero_ordre) VALUES ('"  
 			//	+ destinataire +     "','"
@@ -230,7 +231,7 @@ public class Beans_Message_Depart {
 	
 	
 	public String format_Update_Depart_officiel_Database() {
-		String sql_update = "UPDATE MessageDepartOfficiel SET destinataire = " + "'" + destinataire + "'," +
+		String sql_update = "UPDATE "+desti+" SET " +
 				"date = "       + "'" + DateFormater.DateToString_database(date) +"'," +
 				"objet = "+"'"+objet_message+"'"+
 				" WHERE numero_ordre = "+ numero_ordre +" ;";
@@ -239,7 +240,7 @@ public class Beans_Message_Depart {
 	}
 	
 	public String format_Update_Depart_divers_Database() {
-		String sql_update = "UPDATE MessageDepartOfficiel SET destinataire = " + "'" + destinataire + "'," +
+		String sql_update = "UPDATE MessageDepartDivers SET destinataire = " + "'" + destinataire + "'," +
 				"date = "       + "'" + DateFormater.DateToString_database(date) +"'," +
 				"objet = "+"'"+objet_message+"'"+
 				" WHERE numero_ordre = "+ numero_ordre +" ;";
@@ -385,7 +386,7 @@ public class Beans_Message_Depart {
 	
 	
 	public boolean verifie_si_numero_depart_exist(){
-		String sql = "SELECT * FROM MessageDepart WHERE numero_ordre = "+numero_ordre;
+		String sql = "SELECT * FROM "+desti+" WHERE numero_ordre = "+numero_ordre;
 		boolean empty = false;
 		try {
 			ResultSet rs = Query.select(sql);

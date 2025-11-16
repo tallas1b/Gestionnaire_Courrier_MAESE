@@ -228,6 +228,7 @@ public class Control_Rapport_Depart implements Initializable{
 		}
 		
 		String sql = "SELECT * FROM "+desti+" WHERE date LIKE '%/" +corespondance_month_entier(choice_mois.getValue())+"/%'"; 
+		System.out.println("Le dest est dans controle depart: "+desti);
 
 		if(afficher_table) {//le tableau est deja affiche on enleve les colonnes
 			colonne_numero_depart.setVisible(false);
