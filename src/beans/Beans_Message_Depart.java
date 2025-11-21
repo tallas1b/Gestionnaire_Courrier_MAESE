@@ -187,6 +187,16 @@ public class Beans_Message_Depart {
 				+numero_ordre + ");";
 		return sql;
 	}
+	
+	public String formatToDatabase_TAC() {
+		 
+		String sql = "INSERT INTO Message_TAC_Depart(date,objet,numero_ordre) VALUES ('"  
+			//	+ destinataire +     "','"
+				+ DateFormater.DateToString_database(date)+ "','"
+				+objet_message+ "',"
+				+numero_ordre + ");";
+		return sql;
+	}
 
 	public String formatToDatabase_divers() {
 		String sql = "INSERT INTO MessageDepartDivers(destinataire,date,objet,numero_ordre) VALUES ('"  
@@ -239,6 +249,15 @@ public class Beans_Message_Depart {
 		return sql_update;
 	}
 	
+	public String format_Update_Depart_TAC_Database() {
+		String sql_update = "UPDATE Message_TAC_Depart SET " +
+				"date = "       + "'" + DateFormater.DateToString_database(date) +"'," +
+				"objet = "+"'"+objet_message+"'"+
+				" WHERE numero_ordre = "+ numero_ordre +" ;";
+		System.out.println(sql_update);
+		return sql_update;
+	}
+	
 	public String format_Update_Depart_divers_Database() {
 		String sql_update = "UPDATE MessageDepartDivers SET destinataire = " + "'" + destinataire + "'," +
 				"date = "       + "'" + DateFormater.DateToString_database(date) +"'," +
@@ -265,6 +284,15 @@ public class Beans_Message_Depart {
 		System.out.println(sql_update);
 		return sql_update;
 	}
+	
+	
+	public String format_Update_Numero_Depart() {
+		String sql_update = "UPDATE NumeroOrdreDepart SET numero_ordre = " + numero_ordre +
+				" WHERE poste_diplomatique = " + "'" + destinataire +"' ;";
+		System.out.println(sql_update);
+		return sql_update;
+	}
+	
 
 	//LES LECTURES DEPART
 
@@ -300,10 +328,29 @@ public class Beans_Message_Depart {
 		try {
 
 			//regarder dans create table
-			destinataire = rs.getString(4);
+		//	destinataire = rs.getString(4);
 			date = DateFormater.StringToDate(rs.getString(2));//a formater pour date
 			objet_message = rs.getString(3).replace("*", "'");;
-			numero_ordre = rs.getInt(5);
+			numero_ordre = rs.getInt(4);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+	
+	public boolean formatFromDatabase_TAC( ResultSet rs ) {
+
+		try {
+
+			//regarder dans create table
+			//destinataire = rs.getString(4);
+			date = DateFormater.StringToDate(rs.getString(2));//a formater pour date
+			objet_message = rs.getString(3).replace("*", "'");;
+			numero_ordre = rs.getInt(4);
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -387,6 +434,29 @@ public class Beans_Message_Depart {
 	
 	public boolean verifie_si_numero_depart_exist(){
 		String sql = "SELECT * FROM "+desti+" WHERE numero_ordre = "+numero_ordre;
+		boolean empty = false;
+		try {
+			ResultSet rs = Query.select(sql);
+			
+			while( rs.next() ) {
+			    // ResultSet processing here
+			    empty = true;
+			}
+			Query.close_connection();
+			return empty;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return empty;
+		
+	}
+	
+	
+	public boolean verifie_si_numero_depart_TAC_exist(){
+		String sql = "SELECT * FROM Message_TAC_Depart WHERE numero_ordre = "+numero_ordre;
 		boolean empty = false;
 		try {
 			ResultSet rs = Query.select(sql);

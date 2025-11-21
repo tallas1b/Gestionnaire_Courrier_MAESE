@@ -68,6 +68,22 @@ public class Creat_new_Table {
 			e.printStackTrace();
 		}
 	}
+	
+	//table depart TAC
+		public static void creatTable_Message_Depart_TAC() {
+			String sql =  "CREATE TABLE Message_TAC_Depart(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+					+ "date TEXT NOT NULL,"
+					+ "objet TEXT NOT NULL,"
+					+ "numero_ordre INTEGER DEFAULT 40000 );";
+			try {
+				Query.insert(sql);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 
 
 	//Table Depart Divers 70.000
@@ -142,29 +158,20 @@ public class Creat_new_Table {
 	}
 
 	//table arrivee Officiel (50.000)
-	public static void creatTable_Message_Arrivee_Officiel() {
-		String sql =  "CREATE TABLE Message_Officiel_Arrive(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ "date TEXT NOT NULL,"
-				+ "objet TEXT NOT NULL,"
-				+ "numero_ordre INTEGER DEFAULT 50000 );";
-		try {
-			Query.insert(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	public static void creatTable_Arrive_Message_50000() {
 
-
-	//table arrivee TAC
-	public static void creatTable_Message_Arrivee_TAC() {
-		String sql =  "CREATE TABLE Message_TAC_Arrive(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-				+ "date TEXT NOT NULL,"
-				+ "objet TEXT NOT NULL,"
-				+ "numero_ordre INTEGER DEFAULT 40000 );";
 		try {
-			Query.insert(sql);
+			for(String desti : Constants.liste_ambassade_base_donne) {
+				
+				String sql =  "CREATE TABLE arrive_"+desti+"(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+						+ "date TEXT NOT NULL,"
+						+ "objet TEXT NOT NULL,"
+						//		+"destinataire TEXT NOT NULL,"
+						+"numero_ordre INTEGER DEFAULT 50000);";
+
+				Query.insert(sql);
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
@@ -238,6 +245,34 @@ public class Creat_new_Table {
 	public static void populate_table_numero_ordre() {
 		for (String str : Constants.liste_ambassade) {
 			String sql = "INSERT INTO NumeroOrdreDepart(poste_diplomatique,numero_ordre) VALUES ('"  
+					+str+    "','" +50000+"');";	
+			try {
+				Query.insert(sql);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
+	
+	//tables 50000 arrive
+	public static void creatTableNumero_Ordre_arrive() {
+		String sql =  "CREATE TABLE NumeroOrdreArrive(ID INTEGER PRIMARY KEY AUTOINCREMENT,poste_diplomatique TEXT NOT NULL,"
+				+ "numero_ordre INTEGER DEFAULT 50000);";
+		try {
+			Query.insert(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void populate_table_numero_ordre_arrive() {
+		for (String str : Constants.liste_ambassade) {
+			String sql = "INSERT INTO NumeroOrdreArrive(poste_diplomatique,numero_ordre) VALUES ('"  
 					+str+    "','" +50000+"');";	
 			try {
 				Query.insert(sql);

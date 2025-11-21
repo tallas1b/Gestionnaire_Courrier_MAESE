@@ -183,15 +183,6 @@ public class Beans_Message_Arrive {
 		return sql;
 	}
 
-
-	public String formatToDatabase_TAC() {
-		String sql = "INSERT INTO Message_TAC_Arrive(date,objet,numero_ordre) VALUES ('"
-				+ DateFormater.DateToString_database(date)+ "','"
-				+objet_message+ "',"
-				+numero_d_ordre_expediteur + ");";
-		return sql;
-	}
-
 	public String formatToDatabase_conf() {
 		String sql = "INSERT INTO MessageArriveConf(date,objet,numero_ordre,expediteur) VALUES ('"
 				+ DateFormater.DateToString_database(date)+ "','"
@@ -230,15 +221,6 @@ public class Beans_Message_Arrive {
 
 	public String format_Update_Arrive_officiel_Database() {
 		String sql_update = "UPDATE Message_Officiel_Arrive SET " +
-				"date = "       + "'" + DateFormater.DateToString_database(date) +"'," +
-				"objet = "+"'"+objet_message+"'"+
-				" WHERE numero_ordre = "+ numero_d_ordre_expediteur +" ;";
-		System.out.println(sql_update);
-		return sql_update;
-	}
-
-	public String format_Update_Arrive_TAC_Database() {
-		String sql_update = "UPDATE Message_TAC_Arrive SET "+
 				"date = "       + "'" + DateFormater.DateToString_database(date) +"'," +
 				"objet = "+"'"+objet_message+"'"+
 				" WHERE numero_ordre = "+ numero_d_ordre_expediteur +" ;";
@@ -304,25 +286,6 @@ public class Beans_Message_Arrive {
 
 
 	public boolean formatFromDatabase_officiel( ResultSet rs ) {
-
-		try {
-
-			//regarder dans create table
-			date = DateFormater.StringToDate(rs.getString(2));//a formater pour date
-			objet_message = rs.getString(3).replace("*", "'");;
-			numero_d_ordre_expediteur = rs.getInt(4);
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-
-		return true;
-	}
-
-
-	public boolean formatFromDatabase_TAC( ResultSet rs ) {
 
 		try {
 
@@ -420,30 +383,4 @@ public class Beans_Message_Arrive {
 		return empty;
 		
 	}
-	
-	public boolean verifie_existance_num_arrive_TAC(){
-		//Contrairement au depart on peut avoir deux divers arrive avec le meme num ordre alors on utilise table 
-		//officiel pour filtrer et eviter les duplicata en lieu et place de ArriveDiplomail
-		String sql = "SELECT * FROM Message_TAC_Arrive WHERE numero_ordre = "+numero_d_ordre_expediteur;
-		boolean empty = false;
-		try {
-			ResultSet rs = Query.select(sql);
-			
-			while( rs.next() ) {
-			    // ResultSet processing here
-			    empty = true;
-			}
-			Query.close_connection();
-			return empty;
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return empty;
-		
-	}
-
-
 }

@@ -1,11 +1,18 @@
 package parametres;
 
+import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -47,16 +54,13 @@ public class Parametres_controller implements Initializable{
 	private TextField text_num_depart;
 	
 	@FXML
-	private TextField text_num_depart_officiel;
+	private TextField text_num_depart_TAC;
 	
 	@FXML
 	private TextField text_num_depart_divers;
 	
 	@FXML
 	private TextField text_num_arrive;
-	
-	@FXML
-	private TextField text_num_arrive_officiel;
 
 
 	@Override
@@ -116,9 +120,9 @@ public class Parametres_controller implements Initializable{
 				}
 			}
 			
-			if(text_num_depart_officiel.getText().length() > 0) {
-				if(Methodes.isStringInteger(text_num_depart_officiel.getText())) {
-					Methodes.save("assets/MessageDepartOfficiel.txt", text_num_depart_officiel.getText() );
+			if(text_num_depart_TAC.getText().length() > 0) {
+				if(Methodes.isStringInteger(text_num_depart_TAC.getText())) {
+					Methodes.save("assets/MessageDepartTAC.txt", text_num_depart_TAC.getText() );
 				}
 			}
 			
@@ -134,14 +138,7 @@ public class Parametres_controller implements Initializable{
 					Methodes.save("assets/MessageArrive.txt" , text_num_arrive.getText()) ;
 				}
 			}
-			
-			if(text_num_arrive_officiel.getText().length() > 0) {
-				if(Methodes.isStringInteger(text_num_arrive_officiel.getText())) {
-					Methodes.save("assets/MessageArriveOfficiel.txt", text_num_arrive_officiel.getText() );
-				}
-			}
-			
-			
+				
 
 			//on notifie l utilisateur de l insertion avec suuces
 			Alert alert = new Alert(AlertType.INFORMATION);
@@ -205,6 +202,58 @@ public class Parametres_controller implements Initializable{
 			obj_to_string[i]= array.get(i);
 
 		printer_Dialog(obj_to_string);//on attribut le nom a la constante
+	}
+	
+	@FXML
+	private void loadDB_depart() {
+		
+		try {
+			//on prepare le fichier en mode ecriture
+			
+			BufferedWriter writer = new BufferedWriter(new FileWriter("assets/MessageDepartBD.txt"));
+			
+			for (Map.Entry<String, Integer> entry : Constants.hash_num_departs.entrySet()) {
+				String key = entry.getKey();
+				Integer value = entry.getValue();
+				writer.write( key + ":" + value );
+				writer.newLine();
+			}
+			writer.close();
+			Desktop.getDesktop().open(new File("assets/MessageDepartBD.txt"));
+
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@FXML
+	private void saveDB_depart() {
+		
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader("assets/MessageDepartBD.txt"));
+			
+			 for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+			       System.out.println(line);
+			       String str [] = line.split(":");
+			       String sql_update = "UPDATE NumeroOrdreDepart SET numero_ordre = " + str[1] +
+							" WHERE poste_diplomatique = " + "'" + str[0] +"' ;";
+			       Query.insert(sql_update);
+			    }
+			 
+			reader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 

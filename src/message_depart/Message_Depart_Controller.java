@@ -178,11 +178,11 @@ public class Message_Depart_Controller implements Initializable{
 	private String groupe_date;
 	private File file_a_concatener;
 	private String nom_fichier;
-	private boolean bool_fichier_a_concatener_is_set = false;
+	//	private boolean bool_fichier_a_concatener_is_set = false;
 	private File path_initial_fichier_a_concatener = null;
 	//Lecture pour garder tracabilité
 	private int num_dernier_message_depart;
-	private int num_dernier_message_depart_officiel;
+	private int num_dernier_message_depart_TAC;
 	private int num_dernier_message_depart_divers;
 
 	private PrintService services;
@@ -264,8 +264,16 @@ public class Message_Depart_Controller implements Initializable{
 				if(newValue.equalsIgnoreCase("Officiel")) {			
 					type_message = Type_Message.Officiel;
 					//on recupere le dernier numero a chache changement de type de message uniquement
-					textfield_numero_d_ordre.setText( (num_dernier_message_depart_officiel + 1) +"" );
-					label_numero.setText(Methodes.ajout_point_50000( (num_dernier_message_depart_officiel + 1) +"" ));
+					textfield_numero_d_ordre.clear();//.setText( (num_dernier_message_depart_officiel + 1) +"" );
+					label_numero.setText("50.000");//Methodes.ajout_point_50000( (num_dernier_message_depart_officiel + 1) +"" ));
+
+				}else if(newValue.equalsIgnoreCase("TAC")) {			
+					type_message = Type_Message.T_A_C;
+					//on recupere le dernier numero a chache changement de type de message uniquement
+					textfield_numero_d_ordre.setText( (num_dernier_message_depart_TAC + 1) +"" );
+					label_numero.setText(Methodes.ajout_point_50000( (num_dernier_message_depart_TAC + 1) +"" ));
+					text_destinataire_diplomail.setText("TAC");
+
 
 				}else if(newValue.equalsIgnoreCase("Service")) {	 
 					//si on a un Service alors on affiche juste le Message Service
@@ -327,8 +335,7 @@ public class Message_Depart_Controller implements Initializable{
 					rectangle_mention.setStroke(Color.BLACK);
 
 				}else{
-
-
+					
 					label_mention.setText("TRES SECRET");
 					mention = Mention.Tres_Secret;
 					//on affiche la mention securite chiffre
@@ -351,20 +358,21 @@ public class Message_Depart_Controller implements Initializable{
 		//recuperation du nombre de message officiel par defaut et sur la page de garde
 
 		num_dernier_message_depart = Integer.parseInt( Methodes.load("assets/MessageDepart.txt") );
-		num_dernier_message_depart_officiel = Integer.parseInt( Methodes.load("assets/MessageDepartOfficiel.txt") );
+		num_dernier_message_depart_TAC = Integer.parseInt( Methodes.load("assets/MessageDepartTAC.txt") );
 		num_dernier_message_depart_divers = Integer.parseInt( Methodes.load("assets/MessageDepartDivers.txt") );
 
 		//Diplomail depart
 		text_num_depart.setText( (num_dernier_message_depart + 1 ) +"");
 
-		textfield_numero_d_ordre.setText( (num_dernier_message_depart_officiel +1) + "" );
-		label_numero.setText( Methodes.ajout_point_50000( (num_dernier_message_depart_officiel +1) + "" ) );
+		//	textfield_numero_d_ordre.setText( (num_dernier_message_depart_officiel +1) + "" );
+		//	label_numero.setText( Methodes.ajout_point_50000( (num_dernier_message_depart_officiel +1) + "" ) );
 
 
 		//timer pour decaler le demarage du logiciel et celui du service car sinon 
 		//depart et arive demarrent en mem temp leur requete BD qui fait planter le logiciel
 		recupere_donne();
 		recupere_numero_depart();
+		recupere_numero_arrive();
 		label_date.setText("Dakar , le " + DateFormater.DateToString(date_picker.getValue()));
 
 		Timer timer = new Timer();
@@ -479,7 +487,13 @@ public class Message_Depart_Controller implements Initializable{
 				beans = new Beans_Message_Depart(Integer.valueOf(num_depart), destinataire, mention_string , date, objet,type_message ,Integer.valueOf(numero_ordre),crypto_systeme, nom_fichier);
 
 				// ON VERIFIE SI LE NUMERO DEPART EXISTE DEJA. SI OUI ON UPDATE SI NON ON INSERT
-				boolean verification_existance_num_depart = beans.verifie_si_numero_depart_exist();
+				boolean verification_existance_num_depart = true;
+				if(this.type_message != Type_Message.T_A_C) {
+					verification_existance_num_depart = beans.verifie_si_numero_depart_exist();
+				}else {
+					verification_existance_num_depart = beans.verifie_si_numero_depart_TAC_exist();
+				}
+				
 
 				//################################   UPDATE ###########################//
 
@@ -510,6 +524,9 @@ public class Message_Depart_Controller implements Initializable{
 							}else if(type_message.equalsIgnoreCase("Divers")) {
 								//insertion dans base de donne 70000
 								Query.insert(beans.format_Update_Depart_divers_Database());
+							}else if(type_message.equalsIgnoreCase("TAC")) {
+								//insertion dans base de donne 40000
+								Query.insert(beans.format_Update_Depart_TAC_Database());
 							}
 
 						} else if (mention == Mention.Confidentiel) {
@@ -523,6 +540,9 @@ public class Message_Depart_Controller implements Initializable{
 							}else if(type_message.equalsIgnoreCase("Divers")) {
 								//insertion dans base de donne 70000
 								Query.insert(beans.format_Update_Depart_divers_Database());
+							}else if(type_message.equalsIgnoreCase("TAC")) {
+								//insertion dans base de donne 40000
+								Query.insert(beans.format_Update_Depart_TAC_Database());
 							}
 							//insert conf
 							beans = new Beans_Message_Depart(Integer.valueOf(num_depart), destinataire, mention_string , date, objet,type_message ,Integer.valueOf(numero_ordre),crypto_systeme, nom_fichier);
@@ -539,6 +559,9 @@ public class Message_Depart_Controller implements Initializable{
 							}else if(type_message.equalsIgnoreCase("Divers")) {
 								//insertion dans base de donne 70000
 								Query.insert(beans.format_Update_Depart_divers_Database());
+							}else if(type_message.equalsIgnoreCase("TAC")) {
+								//insertion dans base de donne 40000
+								Query.insert(beans.format_Update_Depart_TAC_Database());
 							}
 							//insert conf
 							beans = new Beans_Message_Depart(Integer.valueOf(num_depart), destinataire, mention_string , date, objet,type_message ,Integer.valueOf(numero_ordre),crypto_systeme, nom_fichier);
@@ -568,9 +591,14 @@ public class Message_Depart_Controller implements Initializable{
 						if(type_message.equalsIgnoreCase("Officiel")) {
 							//insertion dans base de donnee 50000
 							Query.insert(beans.formatToDatabase_officiel());
-							Methodes.save("assets/MessageDepartOfficiel.txt", numero_ordre );
-							num_dernier_message_depart_officiel += 1;
+							Query.insert(beans.format_Update_Numero_Depart());//update du num depart dans la liste des ambassade
+							Constants.hash_num_departs.put(destinataire, Integer.valueOf(numero_ordre));
 
+						}else if(type_message.equalsIgnoreCase("TAC")) {
+							//insertion dans base de donne 40000
+							Query.insert(beans.formatToDatabase_TAC());
+							Methodes.save("assets/MessageDepartTAC.txt" , numero_ordre );
+							num_dernier_message_depart_TAC += 1;
 						}else if(type_message.equalsIgnoreCase("Divers")) {
 							//insertion dans base de donne 70000
 							Query.insert(beans.formatToDatabase_divers());
@@ -588,8 +616,15 @@ public class Message_Depart_Controller implements Initializable{
 						if(type_message.equalsIgnoreCase("Officiel")) {
 							//insertion dans base de donnee 50000
 							Query.insert(beans.formatToDatabase_officiel());
-							Methodes.save("assets/MessageDepartOfficiel.txt", numero_ordre );
-							num_dernier_message_depart_officiel += 1;
+							Query.insert(beans.format_Update_Numero_Depart());//update du num depart dans la liste des ambassade
+							Constants.hash_num_departs.put(destinataire, Integer.valueOf(numero_ordre));
+
+
+						}else if(type_message.equalsIgnoreCase("TAC")) {
+							//insertion dans base de donne 40000
+							Query.insert(beans.formatToDatabase_TAC());
+							Methodes.save("assets/MessageDepartTAC.txt" , numero_ordre );
+							num_dernier_message_depart_TAC += 1;
 
 						}else if(type_message.equalsIgnoreCase("Divers")) {
 							//insertion dans base de donne 70000
@@ -611,8 +646,17 @@ public class Message_Depart_Controller implements Initializable{
 						if(type_message.equalsIgnoreCase("Officiel")) {
 							//insertion dans base de donnee 50000
 							Query.insert(beans.formatToDatabase_officiel());
-							Methodes.save("assets/MessageDepartOfficiel.txt", numero_ordre );
-							num_dernier_message_depart_officiel += 1;
+							//Methodes.save("assets/MessageDepartOfficiel.txt", numero_ordre );
+							//num_dernier_message_depart_officiel += 1;
+							Query.insert(beans.format_Update_Numero_Depart());//update du num depart dans la liste des ambassade
+							Constants.hash_num_departs.put(destinataire, Integer.valueOf(numero_ordre));
+
+
+						}else if(type_message.equalsIgnoreCase("TAC")) {
+							//insertion dans base de donne 40000
+							Query.insert(beans.formatToDatabase_TAC());
+							Methodes.save("assets/MessageDepartTAC.txt" , numero_ordre );
+							num_dernier_message_depart_TAC += 1;
 
 						}else if(type_message.equalsIgnoreCase("Divers")) {
 							//insertion dans base de donne 70000
@@ -644,18 +688,19 @@ public class Message_Depart_Controller implements Initializable{
 			//on deblock bouton valider
 			bouton_valider.setDisable(false);
 			//on reinitialise le bool pour le prochain
-			bool_fichier_a_concatener_is_set = false;
+			//			bool_fichier_a_concatener_is_set = false;
 
 			//clear des differents champs
 			area_objet_message.clear();
-			text_num_depart.clear();
+			text_num_depart.setText("" + (Integer.valueOf(num_depart) + 1));
 			label_objet.setText("Objet du Message");
 			text_destinataire_diplomail.clear();
 			//LE CAS TYPE SERVICE sinon erreur car num est String 'SERVICE'
-			if( !type_message.equals("Service")) {
+			/*		if( !type_message.equals("Service")) {
 				textfield_numero_d_ordre.setText((num_dernier_message_depart_officiel + 1) +"" );
 				label_numero.setText((num_dernier_message_depart_officiel + 1) +"" );
-			}
+			}*/
+			textfield_numero_d_ordre.clear();
 
 
 		} catch (Exception e) {
@@ -730,32 +775,35 @@ public class Message_Depart_Controller implements Initializable{
 
 		//destinataire
 		//on verifie si le champ destinataire n est pas vide
-		if ( text_destinataire_diplomail.getText().length() <= 0) {
-			Decorator.addDecoration(text_destinataire_diplomail, new StyleClassDecoration("warning"));
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Erreur!!!! Ambassade");
-			alert.setHeaderText(null);
-			alert.setContentText("Le champs destinataire du message est vide.\\n veuillez le remplir avant de reessayer.!!");
-			alert.show();
-			return false;
-		}
-
-		boolean b = false;
-		String dest = text_destinataire_diplomail.getText();
-		for( String amb : Constants.liste_ambassade) {
-			if(amb.equalsIgnoreCase(dest)) {
-				b = true;
+		if(type_message != Type_Message.T_A_C) {
+			
+			if ( text_destinataire_diplomail.getText().length() <= 0) {
+				Decorator.addDecoration(text_destinataire_diplomail, new StyleClassDecoration("warning"));
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Erreur!!!! Ambassade");
+				alert.setHeaderText(null);
+				alert.setContentText("Le champs destinataire du message est vide.\\n veuillez le remplir avant de reessayer.!!");
+				alert.show();
+				return false;
 			}
-		}
 
-		if(b == false) {
-			Decorator.addDecoration(text_destinataire_diplomail, new StyleClassDecoration("warning"));
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Erreur!!!! Ambassade");
-			alert.setHeaderText(null);
-			alert.setContentText("Le destinataire du message n'est pas prédéfini.\\n veuillez revoir le champ avant de reessayer.!!");
-			alert.show();
-			return false;
+			boolean b = false;
+			String dest = text_destinataire_diplomail.getText();
+			for( String amb : Constants.liste_ambassade) {
+				if(amb.equalsIgnoreCase(dest)) {
+					b = true;
+				}
+			}
+
+			if(b == false) {
+				Decorator.addDecoration(text_destinataire_diplomail, new StyleClassDecoration("warning"));
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Erreur!!!! Ambassade");
+				alert.setHeaderText(null);
+				alert.setContentText("Le destinataire du message n'est pas prédéfini.\\n veuillez revoir le champ avant de reessayer.!!");
+				alert.show();
+				return false;
+			}
 		}
 
 
@@ -772,7 +820,7 @@ public class Message_Depart_Controller implements Initializable{
 		}
 
 
-		//CAS DU SET FICHIER A CONCATENER
+		/*	//CAS DU SET FICHIER A CONCATENER
 		if(!bool_fichier_a_concatener_is_set) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Fichier a concatener non defini.");
@@ -780,7 +828,7 @@ public class Message_Depart_Controller implements Initializable{
 			alert.setContentText("Le Fichier a concatener est non defini..\n veuillez le selectionner avant de reessayer.");
 			alert.show();
 			return false;
-		}
+		}*/
 
 		return true;
 	}
@@ -813,7 +861,7 @@ public class Message_Depart_Controller implements Initializable{
 			label_pane_steps.setText("Ajout Fichier a echoue. Veuillez lire le rapport d erreur.");
 
 		}else {
-			bool_fichier_a_concatener_is_set = true;
+			//			bool_fichier_a_concatener_is_set = true;
 			path_initial_fichier_a_concatener = file_a_concatener.getParentFile();
 
 			cercle_file_concatene.setFill(Color.LIGHTGREEN);
@@ -967,6 +1015,143 @@ public class Message_Depart_Controller implements Initializable{
 
 	}
 
+
+	private void showExceptionAlert(String headerText,
+			String message, Throwable th) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		th.printStackTrace(pw);
+
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setHeaderText(headerText);
+
+		if (message != null) {
+			alert.setContentText(message);
+		} else {
+			alert.setContentText(th.getMessage());
+		}
+
+		TextArea textArea = new TextArea(sw.toString());
+		textArea.setEditable(false);
+		alert.getDialogPane().setExpandableContent(textArea);
+		alert.showAndWait();
+	}
+
+
+	private void recupere_donne() {
+		int count = 0;
+		//attention je recupere les donnes dans le meme ordre que insee dans la DB. regarder creer table
+		String sql = "SELECT * FROM parametres ;";
+
+		try {
+			ResultSet rs = Query.select(sql);
+			//3. donnees   :colonnes 
+
+			//ligne dossier clair
+			rs.next();
+			String clair = rs.getString(3);
+			if(clair.length()>0) {
+				count += 1;
+			}
+
+
+			//ligne dossier crypto
+			rs.next();
+			String crypto = rs.getString(3);
+			if(crypto.length()>0) {
+				count += 1;
+			}
+
+			//ligne imprimante
+			rs.next();
+			String imprimante = rs.getString(3);
+			if(imprimante.length()>0) {
+				count += 1;
+			}
+
+
+			//fermeture
+			Query.close_connection();
+			if(count <= 3) {
+				Constants.PARAMETRES_RECUPERER_AVEC_SUCCES = true;
+				Constants.DOC_CLAIR = clair;
+				Constants.DOC_CRYTO = crypto;
+				Constants.Default_Printer_Name = imprimante;
+			}else {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Un parametre manquant");
+				alert.setHeaderText(null);
+				alert.setContentText("Un parametre est manquant veuillez revoir le panneau parametre avant de reessayer.");
+				alert.show();
+			}
+
+		} catch (SQLException e) {
+			showExceptionAlert("Erreur insertion base de donne", "Erreurlors de l insertion dans la base de donne. Veuillez verifier le code", e);
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+	private void recupere_numero_depart() {
+		//attention je recupere les donnes dans le meme ordre que insee dans la DB. regarder creer table
+		String sql = "SELECT * FROM NumeroOrdreDepart ;";
+
+		try {
+			ResultSet rs = Query.select(sql);
+			while (rs.next()) {
+				Constants.hash_num_departs.put(rs.getString(2), rs.getInt(3));
+			}
+
+			Query.close_connection();
+
+			for (Map.Entry<String, Integer> entry : Constants.hash_num_departs.entrySet()) {
+				String key = entry.getKey();
+				Integer value = entry.getValue();
+				System.out.println("Key=" + key + ", Value=" + value);
+			}
+
+
+
+		} catch (SQLException e) {
+			showExceptionAlert("Erreur insertion base de donne", "Erreurlors de l insertion dans la base de donne. Veuillez verifier le code", e);
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void recupere_numero_arrive() {
+		//attention je recupere les donnes dans le meme ordre que insee dans la DB. regarder creer table
+		String sql = "SELECT * FROM NumeroOrdreArrive ;";
+
+		try {
+			ResultSet rs = Query.select(sql);
+			while (rs.next()) {
+				Constants.hash_num_arrive.put(rs.getString(2), rs.getInt(3));
+			}
+
+			Query.close_connection();
+
+			for (Map.Entry<String, Integer> entry : Constants.hash_num_arrive.entrySet()) {
+				String key = entry.getKey();
+				Integer value = entry.getValue();
+				System.out.println("Key=" + key + ", Value=" + value);
+			}
+
+
+
+		} catch (SQLException e) {
+			showExceptionAlert("Erreur insertion base de donne", "Erreurlors de l insertion dans la base de donne. Veuillez verifier le code", e);
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 
 	//	/*******************SURTOUT NE PAS SUPPRIMER JUSTE DECOMMENTER****************/
@@ -1139,113 +1324,7 @@ public class Message_Depart_Controller implements Initializable{
 		alert.show();
 	}*/
 
-	private void showExceptionAlert(String headerText,
-			String message, Throwable th) {
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		th.printStackTrace(pw);
 
-		Alert alert = new Alert(Alert.AlertType.ERROR);
-		alert.setHeaderText(headerText);
-
-		if (message != null) {
-			alert.setContentText(message);
-		} else {
-			alert.setContentText(th.getMessage());
-		}
-
-		TextArea textArea = new TextArea(sw.toString());
-		textArea.setEditable(false);
-		alert.getDialogPane().setExpandableContent(textArea);
-		alert.showAndWait();
-	}
-
-
-	private void recupere_donne() {
-		int count = 0;
-		//attention je recupere les donnes dans le meme ordre que insee dans la DB. regarder creer table
-		String sql = "SELECT * FROM parametres ;";
-
-		try {
-			ResultSet rs = Query.select(sql);
-			//3. donnees   :colonnes 
-
-			//ligne dossier clair
-			rs.next();
-			String clair = rs.getString(3);
-			if(clair.length()>0) {
-				count += 1;
-			}
-
-
-			//ligne dossier crypto
-			rs.next();
-			String crypto = rs.getString(3);
-			if(crypto.length()>0) {
-				count += 1;
-			}
-
-			//ligne imprimante
-			rs.next();
-			String imprimante = rs.getString(3);
-			if(imprimante.length()>0) {
-				count += 1;
-			}
-
-
-			//fermeture
-			Query.close_connection();
-			if(count <= 3) {
-				Constants.PARAMETRES_RECUPERER_AVEC_SUCCES = true;
-				Constants.DOC_CLAIR = clair;
-				Constants.DOC_CRYTO = crypto;
-				Constants.Default_Printer_Name = imprimante;
-			}else {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Un parametre manquant");
-				alert.setHeaderText(null);
-				alert.setContentText("Un parametre est manquant veuillez revoir le panneau parametre avant de reessayer.");
-				alert.show();
-			}
-
-		} catch (SQLException e) {
-			showExceptionAlert("Erreur insertion base de donne", "Erreurlors de l insertion dans la base de donne. Veuillez verifier le code", e);
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-
-	private void recupere_numero_depart() {
-		//attention je recupere les donnes dans le meme ordre que insee dans la DB. regarder creer table
-		String sql = "SELECT * FROM NumeroOrdreDepart ;";
-
-		try {
-			ResultSet rs = Query.select(sql);
-			while (rs.next()) {
-				Constants.hash_num_departs.put(rs.getString(2), rs.getInt(3));
-			}
-
-			Query.close_connection();
-
-			for (Map.Entry<String, Integer> entry : Constants.hash_num_departs.entrySet()) {
-				String key = entry.getKey();
-				Integer value = entry.getValue();
-				System.out.println("Key=" + key + ", Value=" + value);
-			}
-
-
-
-		} catch (SQLException e) {
-			showExceptionAlert("Erreur insertion base de donne", "Erreurlors de l insertion dans la base de donne. Veuillez verifier le code", e);
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 
 }

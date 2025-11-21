@@ -40,5 +40,6 @@ public class Constants {
 	public static boolean PARAMETRES_RECUPERER_AVEC_SUCCES = false;
 	
 	public static HashMap<String, Integer> hash_num_departs = new HashMap<String, Integer>();
+	public static HashMap<String, Integer> hash_num_arrive = new HashMap<String, Integer>();
 
 }

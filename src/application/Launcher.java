@@ -12,6 +12,11 @@ public class Launcher {
 		
 	//MOdifier table diver arriver conf arriver et secret
 		Main.main(args);
+		
+		//Creat_new_Table.creatTable_Arrive_Message_50000();
+
+	//	Creat_new_Table.creatTableNumero_Ordre_arrive();
+	//	Creat_new_Table.populate_table_numero_ordre_arrive();
 	
 		
 /*		
@@ -19,14 +24,14 @@ public class Launcher {
 		// Table Depart
 		Creat_new_Table.creatTableMessageDepart();
 		Creat_new_Table.creatTable_Message_50000();
+		Creat_new_Table.creatTable_Message_Depart_TAC();
 		Creat_new_Table.creatTable_Message_Divers();
 		Creat_new_Table.creatTable_destinataires_Message_50000();
 		
 		
 		//Table Arrivee
 		Creat_new_Table.creatTableMessageArrive();
-		Creat_new_Table.creatTable_Message_Arrivee_Officiel();
-		Creat_new_Table.creatTable_Message_Arrivee_TAC();
+		Creat_new_Table.creatTable_Arrive_Message_50000();
 		Creat_new_Table.creatTable_Message_Arrivee_Divers();
 		
 		// Table Parametre
@@ -42,6 +47,8 @@ public class Launcher {
 		
 		Creat_new_Table.creatTableNumero_Ordre_depart();
 		Creat_new_Table.populate_table_numero_ordre();
+		Creat_new_Table.creatTableNumero_Ordre_arrive();
+		Creat_new_Table.populate_table_numero_ordre_arrive();
 		
 		*/
 		

@@ -85,7 +85,6 @@ public class Message_Arrive_Controller implements Initializable{
 	private Type_Message type_message = Type_Message.Officiel;
 	//Lecture pour garder tracabilité
 	private int num_dernier_message_arrive;
-	private int num_dernier_message_arrive_officiel;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -93,7 +92,7 @@ public class Message_Arrive_Controller implements Initializable{
 		choice_mention.getItems().addAll("Claire" ,"Confidentiel" , "Secret" , "Tres Secret");
 		choice_mention.setValue("Claire");
 
-		choice_type_message.getItems().addAll("Officiel","TAC","Service","Divers");
+		choice_type_message.getItems().addAll("Officiel","Service","Divers");
 		choice_type_message.setValue("Officiel");
 
 
@@ -115,17 +114,12 @@ public class Message_Arrive_Controller implements Initializable{
 				if(newValue.equalsIgnoreCase("Officiel")) {			
 					type_message = Type_Message.Officiel;
 					//on recupere le dernier numero a chache changement de type de message uniquement
-					text_numero_ordre_selon_l_expediteur.setText( (num_dernier_message_arrive_officiel + 1) +"" );
+				//	text_numero_ordre_selon_l_expediteur.setText( (num_dernier_message_arrive_officiel + 1) +"" );
 
 				}else if(newValue.equalsIgnoreCase("Service")) {	 
 					//si on a un Service alors on affiche juste le Message Service
 					type_message = Type_Message.Service;
 					text_numero_ordre_selon_l_expediteur.setText("SERVICE");
-
-				}else if(newValue.equalsIgnoreCase("TAC")) {	 
-					//si on a un Service alors on affiche juste le Message Service
-					type_message = Type_Message.T_A_C;
-					text_numero_ordre_selon_l_expediteur.setText("40000");
 
 				}else{//Divers
 					type_message = Type_Message.Divers;
@@ -142,6 +136,13 @@ public class Message_Arrive_Controller implements Initializable{
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				text_expediteur_diplomail.setText(newValue);
+				for( String amb : Constants.liste_ambassade) {
+					if(amb.equalsIgnoreCase(newValue)) {
+						System.out.println("ambassade detecte");
+						String num = Integer.toString( Constants.hash_num_arrive.get(newValue) + 1);
+						text_numero_ordre_selon_l_expediteur.setText( num );
+					}
+				}
 			}
 		});
 
@@ -186,11 +187,11 @@ public class Message_Arrive_Controller implements Initializable{
 
 		//recuperation du nombre de message officiel par defaut 
 		num_dernier_message_arrive = Integer.parseInt( Methodes.load("assets/MessageArrive.txt") );
-		num_dernier_message_arrive_officiel = Integer.parseInt( Methodes.load("assets/MessageArriveOfficiel.txt") );
+//		num_dernier_message_arrive_officiel = Integer.parseInt( Methodes.load("assets/MessageArriveOfficiel.txt") );
 
 		//Diplomail Arrive
 		text_num_arrive.setText( (num_dernier_message_arrive + 1 ) +"");
-		text_numero_ordre_selon_l_expediteur.setText( (num_dernier_message_arrive_officiel +1) + "" );
+//		text_numero_ordre_selon_l_expediteur.setText( (num_dernier_message_arrive_officiel +1) + "" );
 
 	}
 
@@ -245,19 +246,15 @@ public class Message_Arrive_Controller implements Initializable{
 
 			}else {
 
-
-
 				beans = new Beans_Message_Arrive(Integer.valueOf(num_arrive), expediteur, mention, date, objet , type_message, Integer.valueOf(numero_d_ordre),crypto_systeme , nom_fichier);
-
 
 				// ON VERIFIE SI LE NUMERO DEPART EXISTE DEJA. SI OUI ON UPDATE SI NON ON INSERT
 				boolean verification_existance_num_arrive_officiel = beans.verifie_existance_num_arrive_officiel();
-				boolean verification_existance_num_arrive_TAC = beans.verifie_existance_num_arrive_TAC();
 
 				//################################   UPDATE ###########################//
 
 				//on verifie si le num depart correspond existe deja
-				if(verification_existance_num_arrive_officiel || verification_existance_num_arrive_TAC) {
+				if(verification_existance_num_arrive_officiel) {
 					//si il existe alors on update sauf dans le cas service car num ordre = tjrs 0
 
 					System.out.println("dans update message diplomail numero ordre existe deja");
@@ -280,9 +277,6 @@ public class Message_Arrive_Controller implements Initializable{
 								//update dans base de donnee 50000
 								Query.insert(beans.format_Update_Arrive_officiel_Database());
 
-							}else if(type_message.equalsIgnoreCase("TAC")) {
-								//insertion dans base de donne TAC
-								Query.insert(beans.format_Update_Arrive_TAC_Database());
 							}
 
 						} else if (mention.equalsIgnoreCase("Confidentiel")) {
@@ -294,9 +288,6 @@ public class Message_Arrive_Controller implements Initializable{
 								//update dans base de donnee 50000
 								Query.insert(beans.format_Update_Arrive_officiel_Database());
 
-							}else if(type_message.equalsIgnoreCase("TAC")) {
-								//insertion dans base de donne TAC
-								Query.insert(beans.format_Update_Arrive_TAC_Database());
 							}
 							//insert conf
 							beans = new Beans_Message_Arrive(Integer.valueOf(num_arrive), expediteur, mention, date, objet, type_message, Integer.valueOf(numero_d_ordre),crypto_systeme,nom_fichier);
@@ -311,9 +302,6 @@ public class Message_Arrive_Controller implements Initializable{
 								//update dans base de donnee 50000
 								Query.insert(beans.format_Update_Arrive_officiel_Database());
 
-							}else if(type_message.equalsIgnoreCase("TAC")) {
-								//insertion dans base de donne TAC
-								Query.insert(beans.format_Update_Arrive_TAC_Database());
 							}
 							//insert conf
 							beans = new Beans_Message_Arrive(Integer.valueOf(num_arrive), expediteur, mention, date, objet, type_message, Integer.valueOf(numero_d_ordre),crypto_systeme,nom_fichier);
@@ -341,16 +329,13 @@ public class Message_Arrive_Controller implements Initializable{
 						if(type_message.equalsIgnoreCase("Officiel")) {
 							//insertion dans base de donnee 50000
 							Query.insert(beans.formatToDatabase_officiel());
-							Methodes.save("assets/MessageArriveOfficiel.txt", numero_d_ordre );
-							num_dernier_message_arrive_officiel += 1;
+//							Methodes.save("assets/MessageArriveOfficiel.txt", numero_d_ordre );
+//							num_dernier_message_arrive_officiel += 1;
 
 
 						}else if(type_message.equalsIgnoreCase("Divers")) {
 							//insertion dans base de donne 70000
 							Query.insert(beans.formatToDatabase_divers());
-						}else if(type_message.equalsIgnoreCase("TAC")) {
-							//insertion dans base de donne TAC
-							Query.insert(beans.formatToDatabase_TAC());
 						}
 
 					} else if (mention.equalsIgnoreCase("Confidentiel")) {
@@ -365,9 +350,6 @@ public class Message_Arrive_Controller implements Initializable{
 						}else if(type_message.equalsIgnoreCase("Divers")) {
 							//insertion dans base de donne 70000
 							Query.insert(beans.formatToDatabase_divers());
-						}else if(type_message.equalsIgnoreCase("TAC")) {
-							//insertion dans base de donne TAC
-							Query.insert(beans.formatToDatabase_TAC());
 						}
 
 						//insert conf
@@ -386,11 +368,7 @@ public class Message_Arrive_Controller implements Initializable{
 						}else if(type_message.equalsIgnoreCase("Divers")) {
 							//insertion dans base de donne 70000
 							Query.insert(beans.formatToDatabase_divers());
-						}else if(type_message.equalsIgnoreCase("TAC")) {
-							//insertion dans base de donne TAC
-							Query.insert(beans.formatToDatabase_TAC());
 						}
-
 						//insert Secret
 						beans = new Beans_Message_Arrive(Integer.valueOf(num_arrive), expediteur, mention, date, objet , type_message, Integer.valueOf(numero_d_ordre),crypto_systeme,nom_fichier);
 						b = Query.insert(beans.formatToDatabase_secret());

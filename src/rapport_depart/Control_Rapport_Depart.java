@@ -16,6 +16,8 @@ import org.controlsfx.control.textfield.TextFields;
 
 import beans.Beans_Message_Depart;
 import database.Query;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
@@ -26,6 +28,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -51,6 +54,9 @@ public class Control_Rapport_Depart implements Initializable{
 	
 	@FXML 
 	private TextField destinataire;
+	
+	@FXML
+	private Label label_destinataire;
 
 	@FXML
 	private TableView<Beans_Message_Depart> tableview;
@@ -95,7 +101,7 @@ public class Control_Rapport_Depart implements Initializable{
 
 		choice_mois.getItems().addAll(Constants.liste_month);
 		choice_mois.setValue(Constants.liste_month[0]);
-		choice_registre.getItems().addAll("Diplomail","Officiel","Divers","Confidentiel","Secret");
+		choice_registre.getItems().addAll("Diplomail","Officiel", "TAC","Divers","Confidentiel","Secret");
 		choice_registre.setValue("Diplomail");
 		
 		TextFields.bindAutoCompletion(
@@ -114,6 +120,23 @@ public class Control_Rapport_Depart implements Initializable{
 
 		colonne_nom_fichier.setCellValueFactory(new PropertyValueFactory<Beans_Message_Depart, String>("nom_fichier") );
 		tableview.setItems(obser);
+		
+		//binding choice_type_message
+		choice_registre.valueProperty().addListener(new ChangeListener<String>() {
+
+					@Override
+					public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+						if(newValue.equalsIgnoreCase("Officiel")) {			
+							destinataire.setVisible(true);
+							label_destinataire.setVisible(true);
+						}else {	 
+							destinataire.setVisible(false);
+							label_destinataire.setVisible(false);
+						}
+
+					}
+				});
 
 	}
 
@@ -130,6 +153,8 @@ public class Control_Rapport_Depart implements Initializable{
 				return;
 			}
 			on_officiel_selected();
+		}else if(choice_registre.getValue().equalsIgnoreCase("TAC")) {
+			on_TAC_selected();
 		}else if(choice_registre.getValue().equalsIgnoreCase("Divers")) {
 			on_divers_selected();
 		}else if(choice_registre.getValue().equalsIgnoreCase("Confidentiel")) {
@@ -165,6 +190,7 @@ public class Control_Rapport_Depart implements Initializable{
 			colone_Mention.setVisible(true);
 			colone_crypto_systeme.setVisible(true);
 			colonne_nom_fichier.setVisible(true);
+			colonne_destinataire.setVisible(true);
 			afficher_table = true;
 		}
 		
@@ -173,6 +199,35 @@ public class Control_Rapport_Depart implements Initializable{
 			while( rs.next()) {
 				Beans_Message_Depart  bean = new Beans_Message_Depart();
 				bean.formatFromDatabase(rs);
+				obser.add( bean);
+			}
+			Query.close_connection();
+		} catch (SQLException e) {
+			showExceptionAlert("Erreur insertion base de donne", "Erreurlors de l insertion dans la base de donne. Veuillez verifier le code", e);
+			e.printStackTrace();
+		} catch (Exception e) {
+			showExceptionAlert("Erreur insertion base de donne", "Erreurlors de l insertion dans la base de donne. Veuillez verifier le code", e);
+			e.printStackTrace();
+		}
+	}
+	
+	private void on_TAC_selected() {
+		String sql = "SELECT * FROM Message_TAC_Depart ;'"; 
+
+		if(afficher_table) {//le tableau est deja affiche on enleve les colonnes
+			colonne_numero_depart.setVisible(false);
+			colone_Mention.setVisible(false);
+			colone_crypto_systeme.setVisible(false);
+			colonne_nom_fichier.setVisible(false);
+			colonne_destinataire.setVisible(false);
+			afficher_table = false;
+		}
+		
+		try {	
+			ResultSet rs = Query.select(sql);
+			while( rs.next()) {
+				Beans_Message_Depart  bean = new Beans_Message_Depart();
+				bean.formatFromDatabase_TAC(rs);
 				obser.add( bean);
 			}
 			Query.close_connection();
@@ -194,6 +249,7 @@ public class Control_Rapport_Depart implements Initializable{
 			colone_Mention.setVisible(false);
 			colone_crypto_systeme.setVisible(false);
 			colonne_nom_fichier.setVisible(false);
+			colonne_destinataire.setVisible(false);
 			afficher_table = false;
 		}
 		
@@ -235,6 +291,7 @@ public class Control_Rapport_Depart implements Initializable{
 			colone_Mention.setVisible(false);
 			colone_crypto_systeme.setVisible(false);
 			colonne_nom_fichier.setVisible(false);
+			colonne_destinataire.setVisible(false);
 			afficher_table = false;
 		}
 		
@@ -263,6 +320,7 @@ public class Control_Rapport_Depart implements Initializable{
 			colone_Mention.setVisible(false);
 			colone_crypto_systeme.setVisible(false);
 			colonne_nom_fichier.setVisible(false);
+			colonne_destinataire.setVisible(false);
 			afficher_table = false;
 		}
 		
@@ -290,6 +348,8 @@ public class Control_Rapport_Depart implements Initializable{
 			colonne_numero_depart.setVisible(false);
 			colone_Mention.setVisible(false);
 			colone_crypto_systeme.setVisible(false);
+			colonne_destinataire.setVisible(false);
+			colonne_nom_fichier.setVisible(false);
 			afficher_table = false;
 		}
 		
@@ -513,15 +573,7 @@ public class Control_Rapport_Depart implements Initializable{
 			return false;
 		}
 
-
-
-
-		
-
 		return true;
 	}
-
-
-
 
 }
