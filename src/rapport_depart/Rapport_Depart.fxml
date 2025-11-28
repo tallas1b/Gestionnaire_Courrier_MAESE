@@ -37,7 +37,7 @@
             <TableColumn fx:id="colone_Mention" prefWidth="85.0" text="Mention" />
             <TableColumn fx:id="colone_date" prefWidth="70.0" text="Date" />
             <TableColumn fx:id="colone_crypto_systeme" prefWidth="93.0" text="Cryptosysteme" />
-            <TableColumn fx:id="colone_objet" prefWidth="315.0" text="Objet Message" />
+            <TableColumn fx:id="colone_objet" prefWidth="400.0" text="Objet Message" />
         </columns>
       </TableView>
       <AnchorPane layoutX="228.0" layoutY="95.0" prefHeight="123.0" prefWidth="521.0" styleClass="transparent_light_white">

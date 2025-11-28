@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 import database.Query;
+import util.Constants;
 import util.DateFormater;
 
 public class Beans_Message_Arrive {
@@ -18,6 +19,8 @@ public class Beans_Message_Arrive {
 	private Integer numero_d_ordre_expediteur;
 	private String crypto_systeme;
 	private String nom_fichier;
+	
+	private String desti = "";
 
 
 	public Beans_Message_Arrive() {
@@ -38,6 +41,15 @@ public class Beans_Message_Arrive {
 		this.numero_d_ordre_expediteur = numero_d_ordre_expediteur;
 		this.crypto_systeme = crypto_systeme;
 		this.nom_fichier = nom_fichier;
+		
+		int index = 0;
+		for( String amb : Constants.liste_ambassade) {
+			if(amb.equalsIgnoreCase(expediteur)) {
+				desti = Constants.liste_ambassade_base_donne[index];
+				break;
+			}
+			index++;
+		}
 	}
 
 
@@ -167,7 +179,7 @@ public class Beans_Message_Arrive {
 	}
 
 	public String formatToDatabase_officiel() {
-		String sql = "INSERT INTO Message_Officiel_Arrive(date,objet,numero_ordre) VALUES ('"
+		String sql = "INSERT INTO arrive_" + desti + "(date,objet,numero_ordre) VALUES ('"
 				+ DateFormater.DateToString_database(date)+ "','"
 				+objet_message+ "',"
 				+numero_d_ordre_expediteur + ");";
@@ -220,7 +232,7 @@ public class Beans_Message_Arrive {
 
 
 	public String format_Update_Arrive_officiel_Database() {
-		String sql_update = "UPDATE Message_Officiel_Arrive SET " +
+		String sql_update = "UPDATE arrive_" + desti +"  SET " +
 				"date = "       + "'" + DateFormater.DateToString_database(date) +"'," +
 				"objet = "+"'"+objet_message+"'"+
 				" WHERE numero_ordre = "+ numero_d_ordre_expediteur +" ;";
@@ -251,6 +263,14 @@ public class Beans_Message_Arrive {
 				"date = "       + "'" + DateFormater.DateToString_database(date) +"'," +
 				"objet = "+"'"+objet_message+"'"+
 				" WHERE numero_ordre = "+ numero_d_ordre_expediteur +" ;";
+		System.out.println(sql_update);
+		return sql_update;
+	}
+	
+	
+	public String format_Update_Numero_Arrive() {
+		String sql_update = "UPDATE NumeroOrdreArrive SET numero_ordre = " + numero_d_ordre_expediteur +
+				" WHERE poste_diplomatique = " + "'" + expediteur +"' ;";
 		System.out.println(sql_update);
 		return sql_update;
 	}

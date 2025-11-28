@@ -114,7 +114,7 @@ public class Message_Arrive_Controller implements Initializable{
 				if(newValue.equalsIgnoreCase("Officiel")) {			
 					type_message = Type_Message.Officiel;
 					//on recupere le dernier numero a chache changement de type de message uniquement
-				//	text_numero_ordre_selon_l_expediteur.setText( (num_dernier_message_arrive_officiel + 1) +"" );
+					//	text_numero_ordre_selon_l_expediteur.setText( (num_dernier_message_arrive_officiel + 1) +"" );
 
 				}else if(newValue.equalsIgnoreCase("Service")) {	 
 					//si on a un Service alors on affiche juste le Message Service
@@ -136,11 +136,30 @@ public class Message_Arrive_Controller implements Initializable{
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				text_expediteur_diplomail.setText(newValue);
-				for( String amb : Constants.liste_ambassade) {
-					if(amb.equalsIgnoreCase(newValue)) {
-						System.out.println("ambassade detecte");
-						String num = Integer.toString( Constants.hash_num_arrive.get(newValue) + 1);
-						text_numero_ordre_selon_l_expediteur.setText( num );
+				if(type_message == Type_Message.Officiel) {
+					for( String amb : Constants.liste_ambassade) {
+						if(amb.equalsIgnoreCase(newValue)) {
+							System.out.println("ambassade detecte");
+							String num = Integer.toString( Constants.hash_num_arrive.get(newValue) + 1);
+							text_numero_ordre_selon_l_expediteur.setText( num );
+						}
+					}
+				}
+			}
+		});
+		//ca semble redondant avec le code ci dessus mais les deux sont diferents dans le 1er cas on charge un fichier
+		//dans l autre cas, il on insert les données.
+		text_expediteur_diplomail.textProperty().addListener( new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if(type_message == Type_Message.Officiel) {
+					for( String amb : Constants.liste_ambassade) {
+						if(amb.equalsIgnoreCase(newValue)) {
+							System.out.println("ambassade detecte");
+							String num = Integer.toString( Constants.hash_num_arrive.get(newValue) + 1);
+							text_numero_ordre_selon_l_expediteur.setText( num );
+						}
 					}
 				}
 			}
@@ -187,11 +206,11 @@ public class Message_Arrive_Controller implements Initializable{
 
 		//recuperation du nombre de message officiel par defaut 
 		num_dernier_message_arrive = Integer.parseInt( Methodes.load("assets/MessageArrive.txt") );
-//		num_dernier_message_arrive_officiel = Integer.parseInt( Methodes.load("assets/MessageArriveOfficiel.txt") );
+		//		num_dernier_message_arrive_officiel = Integer.parseInt( Methodes.load("assets/MessageArriveOfficiel.txt") );
 
 		//Diplomail Arrive
 		text_num_arrive.setText( (num_dernier_message_arrive + 1 ) +"");
-//		text_numero_ordre_selon_l_expediteur.setText( (num_dernier_message_arrive_officiel +1) + "" );
+		//		text_numero_ordre_selon_l_expediteur.setText( (num_dernier_message_arrive_officiel +1) + "" );
 
 	}
 
@@ -329,8 +348,11 @@ public class Message_Arrive_Controller implements Initializable{
 						if(type_message.equalsIgnoreCase("Officiel")) {
 							//insertion dans base de donnee 50000
 							Query.insert(beans.formatToDatabase_officiel());
-//							Methodes.save("assets/MessageArriveOfficiel.txt", numero_d_ordre );
-//							num_dernier_message_arrive_officiel += 1;
+							Query.insert(beans.format_Update_Numero_Arrive());//update du num depart dans la liste des ambassade
+							Constants.hash_num_arrive.put(expediteur, Integer.valueOf(numero_d_ordre));
+
+							//							Methodes.save("assets/MessageArriveOfficiel.txt", numero_d_ordre );
+							//							num_dernier_message_arrive_officiel += 1;
 
 
 						}else if(type_message.equalsIgnoreCase("Divers")) {
@@ -346,6 +368,9 @@ public class Message_Arrive_Controller implements Initializable{
 						if(type_message.equalsIgnoreCase("Officiel")) {
 							//insertion dans base de donnee 50000
 							Query.insert(beans.formatToDatabase_officiel());
+							Query.insert(beans.format_Update_Numero_Arrive());//update du num depart dans la liste des ambassade
+							Constants.hash_num_arrive.put(expediteur, Integer.valueOf(numero_d_ordre));
+
 
 						}else if(type_message.equalsIgnoreCase("Divers")) {
 							//insertion dans base de donne 70000
@@ -364,6 +389,9 @@ public class Message_Arrive_Controller implements Initializable{
 						if(type_message.equalsIgnoreCase("Officiel")) {
 							//insertion dans base de donnee 50000
 							Query.insert(beans.formatToDatabase_officiel());
+							Query.insert(beans.format_Update_Numero_Arrive());//update du num depart dans la liste des ambassade
+							Constants.hash_num_arrive.put(expediteur, Integer.valueOf(numero_d_ordre));
+
 
 						}else if(type_message.equalsIgnoreCase("Divers")) {
 							//insertion dans base de donne 70000
@@ -399,10 +427,8 @@ public class Message_Arrive_Controller implements Initializable{
 			int ajout = Integer.parseInt( text_num_arrive.getText()) + 1;
 			text_num_arrive.setText( ajout +"" );
 			text_nom_fichier.clear();
-			//LE CAS TYPE SERVICE sinon erreur car num est String 'SERVICE'
-			if( !type_message.equals("Service")) {
-				text_numero_ordre_selon_l_expediteur.setText( (Integer.valueOf(numero_d_ordre) + 1) +"" );
-			}
+			text_expediteur_diplomail.clear();
+			text_numero_ordre_selon_l_expediteur.clear();
 
 
 		} catch (SQLException e) {

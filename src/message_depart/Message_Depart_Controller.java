@@ -194,6 +194,7 @@ public class Message_Depart_Controller implements Initializable{
 	private LocalDate global_date;
 	private String global_numero_ordre =  "";
 	private String global_objet = "";
+	private int index_dossier = 0;
 
 
 	@Override
@@ -240,6 +241,7 @@ public class Message_Depart_Controller implements Initializable{
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				label_poste_diplo.setText(newValue);
+				if(type_message == Type_Message.Officiel) {
 				for( String amb : Constants.liste_ambassade) {
 					if(amb.equalsIgnoreCase(newValue)) {
 						System.out.println("ambassade detecte");
@@ -247,6 +249,7 @@ public class Message_Depart_Controller implements Initializable{
 						textfield_numero_d_ordre.setText( num );
 						label_numero.setText( num );
 					}
+				}
 				}
 
 			}
@@ -265,6 +268,7 @@ public class Message_Depart_Controller implements Initializable{
 					type_message = Type_Message.Officiel;
 					//on recupere le dernier numero a chache changement de type de message uniquement
 					textfield_numero_d_ordre.clear();//.setText( (num_dernier_message_depart_officiel + 1) +"" );
+					text_destinataire_diplomail.clear();
 					label_numero.setText("50.000");//Methodes.ajout_point_50000( (num_dernier_message_depart_officiel + 1) +"" ));
 
 				}else if(newValue.equalsIgnoreCase("TAC")) {			
@@ -274,18 +278,19 @@ public class Message_Depart_Controller implements Initializable{
 					label_numero.setText(Methodes.ajout_point_50000( (num_dernier_message_depart_TAC + 1) +"" ));
 					text_destinataire_diplomail.setText("TAC");
 
-
 				}else if(newValue.equalsIgnoreCase("Service")) {	 
 					//si on a un Service alors on affiche juste le Message Service
 					type_message = Type_Message.Service;
 					textfield_numero_d_ordre.setText("SERVICE");
 					label_numero.setText("SERVICE");
+					text_destinataire_diplomail.clear();
 
 				}else{//Divers
 					type_message = Type_Message.Divers;
 					//on recupere le dernier numero a chache changement de type de message uniquement
 					textfield_numero_d_ordre.setText( (num_dernier_message_depart_divers + 1) +"" );
 					label_numero.setText(Methodes.ajout_point_50000( (num_dernier_message_depart_divers + 1) +"" ));
+					text_destinataire_diplomail.clear();
 				}
 
 			}
@@ -701,6 +706,11 @@ public class Message_Depart_Controller implements Initializable{
 				label_numero.setText((num_dernier_message_depart_officiel + 1) +"" );
 			}*/
 			textfield_numero_d_ordre.clear();
+			if(this.type_message == Type_Message.T_A_C) {
+				textfield_numero_d_ordre.setText((num_dernier_message_depart_TAC + 1) +"" );
+				label_numero.setText((num_dernier_message_depart_TAC + 1) +"" );
+				text_destinataire_diplomail.setText("TAC");
+			}
 
 
 		} catch (Exception e) {
@@ -788,11 +798,15 @@ public class Message_Depart_Controller implements Initializable{
 			}
 
 			boolean b = false;
+			index_dossier = 0;
+			int i = 0;
 			String dest = text_destinataire_diplomail.getText();
 			for( String amb : Constants.liste_ambassade) {
 				if(amb.equalsIgnoreCase(dest)) {
 					b = true;
+					index_dossier = i;
 				}
+				i++;
 			}
 
 			if(b == false) {
@@ -898,7 +912,8 @@ public class Message_Depart_Controller implements Initializable{
 					if(Constants.DOC_CLAIR.length()>0) {
 						//chooser.setInitialDirectory(new File(Constants.DOC_CLAIR));
 						// **** dan sce cas on sait deja le directory. alors on ajoute juste le separator et le nom du fichier
-						f = new File(Constants.DOC_CLAIR+"//"+nom_fichier);
+						String sous_dossier = Constants.liste_ambassade_base_donne[index_dossier];
+						f = new File(Constants.DOC_CLAIR+"//"+  sous_dossier +"//"+nom_fichier);
 						System.out.println(f.getAbsolutePath());
 					}else {
 						//si le directory n est pas choisi, alors il demande de le choisir

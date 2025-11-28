@@ -164,6 +164,7 @@ public class Parametres_controller implements Initializable{
 		DirectoryChooser chooser = new DirectoryChooser();
 		File f = chooser.showDialog(null);
 		text_clair.setText(f.getAbsolutePath());
+		creer_dossier(f);
 	}
 
 
@@ -262,7 +263,7 @@ public class Parametres_controller implements Initializable{
 		ChoiceDialog<String> cDial = new ChoiceDialog<>(choices[0], choices);
 		cDial.setTitle("Liste des imprimantes");
 		cDial.setHeaderText("Veuillez choisir une imprimante");
-		cDial.setContentText("Imprimantes d�t�ct�s :");
+		cDial.setContentText("Imprimantes detectes :");
 		Optional<String> selection = cDial.showAndWait();
 
 		if ( selection.isPresent() )
@@ -297,6 +298,19 @@ public class Parametres_controller implements Initializable{
 		textArea.setEditable(false);
 		alert.getDialogPane().setExpandableContent(textArea);
 		alert.showAndWait();
+	}
+	
+	
+	private void creer_dossier(File path_dossier_clair) {
+		
+		for (String amb : Constants.liste_ambassade_base_donne) {
+
+			File fichier = new File( path_dossier_clair.getAbsolutePath() + "/" + amb);
+			if( !fichier.exists()) {
+				fichier.mkdir();
+			}
+		}
+		
 	}
 
 }
