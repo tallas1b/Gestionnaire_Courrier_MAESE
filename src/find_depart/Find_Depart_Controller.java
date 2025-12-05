@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 
 import org.controlsfx.control.decoration.Decorator;
 import org.controlsfx.control.decoration.StyleClassDecoration;
+import org.controlsfx.control.textfield.TextFields;
 
 import beans.Beans_Message_Depart;
 import database.Connexion;
@@ -28,6 +29,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import util.Constants;
 import util.Methodes;
 
 public class Find_Depart_Controller implements Initializable{
@@ -35,13 +37,18 @@ public class Find_Depart_Controller implements Initializable{
 
 	@FXML
 	private Pane pane_criter_numero_depart;
+	
 	@FXML
 	private TextField textfield_numero_depart;
 
+	@FXML
+	private TextField text_destinataire_diplomail;
 
 	@FXML
 	private Pane pane_criter_destinataire;	
+	
 	@FXML
+
 	private TextField textfield_objet;
 
 	@FXML
@@ -49,7 +56,7 @@ public class Find_Depart_Controller implements Initializable{
 
 	@FXML
 	private TableColumn<Beans_Message_Depart, Integer> colonne_numero_depart;
-	
+
 	@FXML
 	private TableColumn<Beans_Message_Depart, Integer> colonne_numero_ordre;
 
@@ -67,7 +74,7 @@ public class Find_Depart_Controller implements Initializable{
 
 	@FXML
 	private TableColumn<Beans_Message_Depart, String> crypto_systeme;
-	
+
 	@FXML
 	private TableColumn<Beans_Message_Depart, String> colonne_nom_fichier;
 
@@ -108,8 +115,12 @@ public class Find_Depart_Controller implements Initializable{
 		crypto_systeme.setCellValueFactory(new PropertyValueFactory<Beans_Message_Depart, String>("crypto_systeme"));
 		colonne_numero_ordre.setCellValueFactory(new PropertyValueFactory<Beans_Message_Depart, Integer>("numero_ordre") );
 		colonne_nom_fichier.setCellValueFactory(new PropertyValueFactory<Beans_Message_Depart, String>("nom_fichier") );
-		
+
 		table.setItems(obser);
+
+		TextFields.bindAutoCompletion(
+				text_destinataire_diplomail ,
+				Constants.liste_ambassade);
 	}
 
 
@@ -134,11 +145,11 @@ public class Find_Depart_Controller implements Initializable{
 
 		//objet
 		//on recherche un mot dans les objet sur les message de 1 mois pour eviter un relantissement trop important
-		
+
 
 		String objet = textfield_objet.getText();
 
-		String sql = "SELECT * FROM MessageDepart WHERE  objet LIKE '%"+objet+"%'";
+		String sql = "SELECT * FROM MessageDepart WHERE  destinataire = '"+ text_destinataire_diplomail.getText() +"' AND objet LIKE '%"+objet+"%'";
 
 		Connection conn = Connexion.connect();
 		System.out.println(sql);
@@ -174,9 +185,9 @@ public class Find_Depart_Controller implements Initializable{
 
 
 		Beans_Message_Depart beans_select = new Beans_Message_Depart();
-		String sql = "SELECT * FROM MessageDepart WHERE numero_ordre = "+Integer.parseInt(num_depart );
+		String sql = "SELECT * FROM MessageDepart WHERE numero_ordre = "+Integer.parseInt(num_depart ) + "  AND destinataire = '"+ text_destinataire_diplomail.getText() +"';";
 		System.out.println(sql);
-		
+
 		try {
 			ResultSet rs = Query.select(sql);
 			rs.next();
@@ -189,7 +200,7 @@ public class Find_Depart_Controller implements Initializable{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 
@@ -217,6 +228,40 @@ public class Find_Depart_Controller implements Initializable{
 			alert.show();
 			return false;
 		}
+
+		//on verifie si le champ destinataire n est pas vide
+
+		if ( text_destinataire_diplomail.getText().length() <= 0) {
+			Decorator.addDecoration(text_destinataire_diplomail, new StyleClassDecoration("warning"));
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Erreur!!!! Ambassade");
+			alert.setHeaderText(null);
+			alert.setContentText("Le champs destinataire du message est vide.\\n veuillez le remplir avant de reessayer.!!");
+			alert.show();
+			return false;
+		}
+
+		boolean b = false;
+		
+		String dest = text_destinataire_diplomail.getText();
+		for( String amb : Constants.liste_ambassade) {
+			if(amb.equalsIgnoreCase(dest)) {
+				b = true;
+				break;
+			}
+			System.out.println(amb);
+		}
+
+		if(b == false) {
+			Decorator.addDecoration(text_destinataire_diplomail, new StyleClassDecoration("warning"));
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Erreur!!!! Ambassade");
+			alert.setHeaderText(null);
+			alert.setContentText("Le destinataire du message n'est pas prédéfini.\\n veuillez revoir le champ avant de reessayer.!!");
+			alert.show();
+			return false;
+		}
+
 
 		return true;
 	}

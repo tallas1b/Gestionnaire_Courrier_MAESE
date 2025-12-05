@@ -113,7 +113,7 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </Button>
-      <Button layoutX="736.0" layoutY="384.0" mnemonicParsing="false" onAction="#loadDB_depart" text="Load DB Arrivée">
+      <Button layoutX="736.0" layoutY="384.0" mnemonicParsing="false" onAction="#loadDB_arrive" text="Load DB Arrivée">
          <graphic>
             <ImageView fitHeight="50.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -125,7 +125,7 @@
             <Font name="System Bold" size="13.0" />
          </font>
       </Button>
-      <Button layoutX="736.0" layoutY="441.0" mnemonicParsing="false" onAction="#saveDB_depart" text="Save DB Arrivée">
+      <Button layoutX="736.0" layoutY="441.0" mnemonicParsing="false" onAction="#saveDB_arrive" text="Save DB Arrivée">
          <graphic>
             <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                <image>

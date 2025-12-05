@@ -178,7 +178,7 @@ public class Message_Depart_Controller implements Initializable{
 	private String groupe_date;
 	private File file_a_concatener;
 	private String nom_fichier;
-	//	private boolean bool_fichier_a_concatener_is_set = false;
+	private boolean bool_fichier_a_concatener_is_set = false;
 	private File path_initial_fichier_a_concatener = null;
 	//Lecture pour garder tracabilité
 	private int num_dernier_message_depart;
@@ -693,7 +693,7 @@ public class Message_Depart_Controller implements Initializable{
 			//on deblock bouton valider
 			bouton_valider.setDisable(false);
 			//on reinitialise le bool pour le prochain
-			//			bool_fichier_a_concatener_is_set = false;
+			bool_fichier_a_concatener_is_set = false;
 
 			//clear des differents champs
 			area_objet_message.clear();
@@ -834,7 +834,7 @@ public class Message_Depart_Controller implements Initializable{
 		}
 
 
-		/*	//CAS DU SET FICHIER A CONCATENER
+			//CAS DU SET FICHIER A CONCATENER
 		if(!bool_fichier_a_concatener_is_set) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Fichier a concatener non defini.");
@@ -842,7 +842,7 @@ public class Message_Depart_Controller implements Initializable{
 			alert.setContentText("Le Fichier a concatener est non defini..\n veuillez le selectionner avant de reessayer.");
 			alert.show();
 			return false;
-		}*/
+		}
 
 		return true;
 	}
@@ -875,7 +875,7 @@ public class Message_Depart_Controller implements Initializable{
 			label_pane_steps.setText("Ajout Fichier a echoue. Veuillez lire le rapport d erreur.");
 
 		}else {
-			//			bool_fichier_a_concatener_is_set = true;
+			bool_fichier_a_concatener_is_set = true;
 			path_initial_fichier_a_concatener = file_a_concatener.getParentFile();
 
 			cercle_file_concatene.setFill(Color.LIGHTGREEN);

@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 
 import org.controlsfx.control.decoration.Decorator;
 import org.controlsfx.control.decoration.StyleClassDecoration;
+import org.controlsfx.control.textfield.TextFields;
 
 import beans.Beans_Message_Arrive;
 import database.Connexion;
@@ -28,6 +29,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import util.Constants;
 import util.Methodes;
 
 public class Find_Arrive_Controller implements Initializable{
@@ -35,14 +37,21 @@ public class Find_Arrive_Controller implements Initializable{
 
 	@FXML
 	private Pane pane_criter_numero_arrive;
+
 	@FXML
 	private TextField textfield_numero_arrive;
 
-
 	@FXML
 	private Pane pane_criter_objet;	
+
 	@FXML
 	private TextField textfield_objet;
+
+	@FXML
+	private Pane pane_criter_expediteur;	
+
+	@FXML
+	private TextField text_expediteur_diplomail;
 
 
 	@FXML
@@ -50,7 +59,7 @@ public class Find_Arrive_Controller implements Initializable{
 
 	@FXML
 	private TableColumn<Beans_Message_Arrive, Integer> colonne_numero_arrive;
-	
+
 	@FXML
 	private TableColumn<Beans_Message_Arrive, Integer> colonne_numero_ordre;
 
@@ -65,10 +74,10 @@ public class Find_Arrive_Controller implements Initializable{
 
 	@FXML
 	private TableColumn<Beans_Message_Arrive, String> colone_objet;
-	
+
 	@FXML
 	private TableColumn<Beans_Message_Arrive, String> crypto_systeme;
-	
+
 	@FXML
 	private TableColumn<Beans_Message_Arrive, String> colonne_nom_fichier;
 
@@ -109,8 +118,12 @@ public class Find_Arrive_Controller implements Initializable{
 		crypto_systeme.setCellValueFactory(new PropertyValueFactory<Beans_Message_Arrive, String>("crypto_systeme"));
 		colonne_numero_ordre.setCellValueFactory(new PropertyValueFactory<Beans_Message_Arrive, Integer>("numero_d_ordre_expediteur") );
 		colonne_nom_fichier.setCellValueFactory(new PropertyValueFactory<Beans_Message_Arrive, String>("nom_fichier") );
-		
+
 		table.setItems(obser);
+
+		TextFields.bindAutoCompletion(
+				text_expediteur_diplomail,
+				Constants.liste_ambassade);
 
 	}
 
@@ -136,11 +149,11 @@ public class Find_Arrive_Controller implements Initializable{
 
 		//objet
 		//on recherche un mot dans les objet sur les message de 1 mois pour eviter un relantissement trop important
-		
+
 
 		String objet = textfield_objet.getText();
 
-		String sql = "SELECT * FROM MessageArrive WHERE  objet LIKE '%"+objet+"%'";
+		String sql = "SELECT * FROM MessageArrive WHERE  expediteur = '"+ text_expediteur_diplomail.getText() +"' AND objet LIKE '%"+objet+"%'";
 
 		Connection conn = Connexion.connect();
 		System.out.println(sql);
@@ -168,17 +181,16 @@ public class Find_Arrive_Controller implements Initializable{
 
 
 	private void critere_numero_depart() {
-		
+
 		//on vide dabord la liste pour eviter que les anciennes recherches ne poluent
 		obser.clear();
 
 		validation_vide_et_entier(textfield_numero_arrive);
 		String num_arrive = textfield_numero_arrive.getText();
 
-
 		Beans_Message_Arrive beans_select = new Beans_Message_Arrive();
-		String sql = "SELECT * FROM MessageArrive WHERE numero_ordre = "+ Integer.parseInt(num_arrive);
-		
+		String sql = "SELECT * FROM MessageArrive WHERE numero_ordre = "+Integer.parseInt(num_arrive ) + "  AND expediteur = '"+ text_expediteur_diplomail.getText() +"';";
+
 		try {
 			ResultSet rs = Query.select(sql);
 			rs.next();
@@ -190,11 +202,11 @@ public class Find_Arrive_Controller implements Initializable{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
-	
-	
+
+
+
 	private boolean validation_vide_et_entier(TextField textf) {
 
 		//validation champ vide
@@ -218,6 +230,28 @@ public class Find_Arrive_Controller implements Initializable{
 			alert.show();
 			return false;
 		}
+
+		boolean b = false;
+
+		String dest = text_expediteur_diplomail.getText();
+		for( String amb : Constants.liste_ambassade) {
+			if(amb.equalsIgnoreCase(dest)) {
+				b = true;
+				break;
+			}
+			System.out.println(amb);
+		}
+
+		if(b == false) {
+			Decorator.addDecoration(text_expediteur_diplomail, new StyleClassDecoration("warning"));
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Erreur!!!! Ambassade");
+			alert.setHeaderText(null);
+			alert.setContentText("Le destinataire du message n'est pas prédéfini.\n veuillez revoir le champ avant de reessayer.!!");
+			alert.show();
+			return false;
+		}
+
 
 		return true;
 	}

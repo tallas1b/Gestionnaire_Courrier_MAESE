@@ -229,6 +229,30 @@ public class Parametres_controller implements Initializable{
 		}
 	}
 	
+	@FXML
+	private void loadDB_arrive() {
+		
+		try {
+			//on prepare le fichier en mode ecriture
+			
+			BufferedWriter writer = new BufferedWriter(new FileWriter("assets/MessageArriveBD.txt"));
+			
+			for (Map.Entry<String, Integer> entry : Constants.hash_num_arrive.entrySet()) {
+				String key = entry.getKey();
+				Integer value = entry.getValue();
+				writer.write( key + ":" + value );
+				writer.newLine();
+			}
+			writer.close();
+			Desktop.getDesktop().open(new File("assets/MessageArriveBD.txt"));
+
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	
 	@FXML
 	private void saveDB_depart() {
@@ -240,6 +264,33 @@ public class Parametres_controller implements Initializable{
 			       System.out.println(line);
 			       String str [] = line.split(":");
 			       String sql_update = "UPDATE NumeroOrdreDepart SET numero_ordre = " + str[1] +
+							" WHERE poste_diplomatique = " + "'" + str[0] +"' ;";
+			       Query.insert(sql_update);
+			    }
+			 
+			reader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@FXML
+	private void saveDB_arrive() {
+		
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader("assets/MessageArriveBD.txt"));
+			
+			 for (String line = reader.readLine(); line != null; line = reader.readLine()) {
+			       System.out.println(line);
+			       String str [] = line.split(":");
+			       String sql_update = "UPDATE NumeroOrdreArrive SET numero_ordre = " + str[1] +
 							" WHERE poste_diplomatique = " + "'" + str[0] +"' ;";
 			       Query.insert(sql_update);
 			    }
